@@ -1,0 +1,45 @@
+# --- Flutter / Dart ---
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+coverage/
+
+# Textos generados por flutter gen-l10n (se regeneran con pub get)
+lib/l10n/app_localizations*.dart
+
+# --- IDE ---
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+.DS_Store
+
+# --- Android ---
+android/local.properties
+android/.gradle/
+android/captures/
+android/app/debug
+android/app/profile
+android/app/release
+**/*.keystore
+**/*.jks
+android/key.properties
+
+# --- iOS ---
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/ephemeral/
+ios/Runner.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+
+# --- Archivos locales de este equipo ---
+.*.zip
+verificacion.txt
+devtools_options.yaml

@@ -1,0 +1,823 @@
+{
+  "@@locale": "es",
+  "appName": "Sr Robot",
+  "commonRetry": "Reintentar",
+  "commonCancel": "Cancelar",
+  "commonContinue": "Continuar",
+  "commonSeeAll": "Ver todo",
+  "commonSave": "Guardar",
+  "commonFree": "Gratis",
+  "commonGenericError": "Algo salió mal. Inténtalo de nuevo.",
+  "commonNetworkError": "No pudimos conectar con el servidor. Puede estar despertando; intenta de nuevo en unos segundos.",
+  "commonLoading": "Cargando…",
+  "commonKm": "{km} km",
+  "@commonKm": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "commonComingSoonTitle": "Muy pronto",
+  "commonComingSoonBody": "Sr Robot está terminando de armar esta sección.",
+  "loginTitle": "Hola, soy Sr Robot",
+  "loginSubtitle": "Reparamos tus equipos con técnicos verificados cerca de ti.",
+  "loginNeedRepair": "Necesito reparar",
+  "loginNeedRepairHint": "Encuentra un técnico",
+  "loginIamTechnician": "Soy técnico",
+  "loginIamTechnicianHint": "Recibe clientes",
+  "loginPhoneTab": "Celular",
+  "loginEmailTab": "Correo",
+  "loginPhoneHint": "300 123 4567",
+  "loginEmailHint": "tucorreo@ejemplo.com",
+  "loginPasswordHint": "Contraseña",
+  "loginSendCode": "Enviar código",
+  "loginWithPassword": "Entrar con contraseña",
+  "loginWithCode": "Entrar con código",
+  "loginSubmitPassword": "Entrar",
+  "loginNoAccount": "¿No tienes cuenta?",
+  "loginCreateAccount": "Crear cuenta",
+  "loginInvalidPhone": "Escribe un celular válido",
+  "loginInvalidEmail": "Escribe un correo válido",
+  "loginInvalidPassword": "La contraseña tiene al menos 8 caracteres",
+  "loginWrongCredentials": "Los datos no coinciden. Revisa e inténtalo de nuevo.",
+  "loginNoTechnicianRole": "Tu cuenta aún no tiene perfil de técnico. Entraste en modo cliente.",
+  "otpTitle": "Verifica tu código",
+  "otpSubtitle": "Enviamos un código de 6 dígitos a {destination}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "otpVerify": "Verificar",
+  "otpResendIn": "Reenviar código en {seconds} s",
+  "@otpResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpResend": "Reenviar código",
+  "otpResent": "Te enviamos un código nuevo",
+  "otpInvalid": "El código no es válido o ya venció",
+  "otpDemoCode": "Código de prueba: {code}",
+  "@otpDemoCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "registerTitle": "Crea tu cuenta",
+  "registerName": "Nombre completo",
+  "registerAcceptTerms": "Acepto los términos y la política de datos",
+  "registerSubmit": "Crear cuenta",
+  "registerNameRequired": "Escribe tu nombre",
+  "registerTermsRequired": "Debes aceptar los términos",
+  "registerAlreadyExists": "Ya existe una cuenta con ese correo o celular",
+  "navHome": "Inicio",
+  "navSearch": "Buscar",
+  "navRepairs": "Reparaciones",
+  "navMessages": "Mensajes",
+  "navProfile": "Perfil",
+  "navPanel": "Panel",
+  "navRequests": "Solicitudes",
+  "navAgenda": "Agenda",
+  "navParts": "Repuestos",
+  "navBusiness": "Mi negocio",
+  "homeGreeting": "Hola, {name} 👋",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeQuestion": "¿Qué equipo reparamos hoy?",
+  "homeCurrentLocation": "Ubicación actual",
+  "homeLocationUnknown": "Activa tu ubicación",
+  "homeSearchHint": "Busca técnico, falla o equipo",
+  "homeCategories": "Categorías",
+  "homeRepairInProgress": "Reparación en curso",
+  "homeQuoteBannerTitle": "Cotiza gratis en minutos",
+  "homeQuoteBannerBody": "Cuéntanos la falla y hasta 3 técnicos te envían su oferta.",
+  "homeQuoteBannerCta": "Pedir cotización",
+  "homeNearby": "Técnicos cercanos",
+  "homeTopRated": "Mejor calificados",
+  "homeNoTechnicians": "Aún no hay técnicos en tu zona.",
+  "searchTitle": "Buscar técnicos",
+  "searchHint": "Nombre, servicio o falla",
+  "searchFilterHome": "A domicilio",
+  "searchFilterVerified": "Verificado",
+  "searchFilterRating": "Calificación 4.8+",
+  "searchList": "Lista",
+  "searchMap": "Mapa",
+  "searchResults": "{count, plural, =0{Sin resultados} =1{1 técnico} other{{count} técnicos}}",
+  "@searchResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchEmptyTitle": "No encontramos técnicos",
+  "searchEmptyBody": "Prueba con otro filtro o amplía la búsqueda.",
+  "searchMapNeedsLocation": "Activa tu ubicación para ver el mapa.",
+  "techVerified": "Verificado",
+  "techReviews": "{count, plural, =0{Sin reseñas} =1{1 reseña} other{{count} reseñas}}",
+  "@techReviews": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techFrom": "Desde {price}",
+  "@techFrom": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "techHomeService": "A domicilio",
+  "techCoverage": "Cobertura {km} km",
+  "@techCoverage": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "techResponseTime": "Responde {time}",
+  "@techResponseTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "techCompleted": "{count} reparaciones",
+  "@techCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techSchedule": "Horario",
+  "techClosed": "Cerrado",
+  "techServices": "Servicios",
+  "techNoServices": "Este técnico aún no publica servicios.",
+  "techWarrantyDays": "{days} días de garantía",
+  "@techWarrantyDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "techReviewsTitle": "Reseñas",
+  "techNoReviews": "Todavía no tiene reseñas.",
+  "techReply": "Respuesta del técnico",
+  "techChat": "Chatear",
+  "techQuote": "Cotizar",
+  "techSchedule2": "Agendar cita",
+  "techAbout": "Sobre el negocio",
+  "techFavoriteAdded": "Guardado en favoritos",
+  "techFavoriteRemoved": "Quitado de favoritos",
+  "techHomeFee": "Recargo a domicilio {fee}",
+  "@techHomeFee": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "daySun": "Dom",
+  "dayMon": "Lun",
+  "dayTue": "Mar",
+  "dayWed": "Mié",
+  "dayThu": "Jue",
+  "dayFri": "Vie",
+  "daySat": "Sáb",
+  "statusSolicitado": "Solicitado",
+  "statusDiagnostico": "Diagnóstico",
+  "statusEnReparacion": "En reparación",
+  "statusListo": "Listo para entrega",
+  "statusEntregado": "Entregado",
+  "statusCancelado": "Cancelado",
+  "statusDisputa": "En disputa",
+  "profileSwitchToTechnician": "Cambiar a Modo Técnico",
+  "profileSwitchToClient": "Cambiar a Modo Cliente",
+  "profileLogout": "Cerrar sesión",
+  "profileModeClient": "Modo cliente",
+  "profileModeTechnician": "Modo técnico",
+  "payNEQUI": "Nequi",
+  "payDAVIPLATA": "Daviplata",
+  "payCARD": "Tarjeta",
+  "payCASH": "Efectivo",
+  "escrowNote": "Pago protegido (Escrow): Sr Robot retiene el dinero y solo se lo entrega al técnico cuando confirmes que recibiste tu equipo.",
+  "escrowShort": "Pago protegido (Escrow)",
+  "commonTotal": "Total",
+  "commonClose": "Cerrar",
+  "commonConfirm": "Confirmar",
+  "commonSend": "Enviar",
+  "commonOptional": "Opcional",
+  "commonAddPhoto": "Agregar foto",
+  "commonCamera": "Cámara",
+  "commonGallery": "Galería",
+  "quoteTitle": "Pedir cotización",
+  "quoteDevice": "¿Qué equipo es?",
+  "quoteBrandModel": "Marca y modelo",
+  "quoteBrandModelHint": "Ej. Samsung A54",
+  "quoteIssue": "¿Qué le pasa?",
+  "quoteIssueHint": "Describe la falla con tus palabras",
+  "quoteCommonIssues": "Fallas comunes",
+  "issueScreen": "Pantalla rota",
+  "issueBattery": "No carga / batería",
+  "issueWater": "Se mojó",
+  "issueNoPower": "No enciende",
+  "issueSlow": "Está lento",
+  "issueSound": "Sin sonido",
+  "issueCamera": "Falla la cámara",
+  "issueKeyboard": "Teclado o botones",
+  "quoteMedia": "Fotos o video de la falla",
+  "quoteMediaHint": "Hasta 8 archivos. Ayudan a cotizar mejor.",
+  "quoteHome": "¿Requiere servicio a domicilio?",
+  "quoteAddress": "Dirección",
+  "quoteAddressHint": "Calle, número, barrio",
+  "quoteUrgency": "Urgencia",
+  "urgencyLow": "Puede esperar",
+  "urgencyNormal": "Normal",
+  "urgencyHigh": "Urgente",
+  "quoteBroadcast": "Enviaremos tu solicitud a hasta 3 técnicos cercanos.",
+  "quoteDirect": "Solicitud directa a {name}",
+  "@quoteDirect": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteSubmit": "Enviar solicitud",
+  "quoteRequired": "Completa el equipo, la marca y la descripción",
+  "quoteAddressRequired": "Escribe la dirección para el servicio a domicilio",
+  "quoteSent": "¡Solicitud enviada!",
+  "quoteNoTechnicians": "Por ahora no hay técnicos disponibles para esa categoría cerca de ti.",
+  "compareTitle": "Cotizaciones recibidas",
+  "compareWaitingTitle": "Sr Robot está buscando ofertas",
+  "compareWaitingBody": "Los técnicos están revisando tu solicitud. Te avisaremos cuando llegue la primera cotización.",
+  "compareExpires": "Vence {date}",
+  "@compareExpires": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "comparePrice": "Precio",
+  "compareTime": "Tiempo",
+  "compareWarranty": "Garantía",
+  "compareRating": "Calificación",
+  "compareWarrantyMonths": "{days} días",
+  "@compareWarrantyMonths": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "tagBestPrice": "Mejor precio",
+  "tagFastest": "Más rápido",
+  "tagBestRated": "Mejor calificado",
+  "compareAccept": "Aceptar oferta",
+  "compareChoosePayment": "¿Cómo quieres pagar?",
+  "compareAccepted": "¡Oferta aceptada! Se creó tu orden de reparación.",
+  "compareClosed": "Esta solicitud ya no recibe ofertas.",
+  "compareCancelRequest": "Cancelar solicitud",
+  "scheduleTitle": "Agendar cita",
+  "scheduleService": "Servicio",
+  "scheduleDay": "Día",
+  "scheduleTime": "Hora",
+  "scheduleNoSlots": "No hay horarios libres ese día. Prueba otro.",
+  "scheduleMode": "Modalidad",
+  "scheduleAtShop": "En taller",
+  "scheduleAtHome": "A domicilio",
+  "scheduleHomeFee": "+{fee}",
+  "@scheduleHomeFee": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "schedulePayment": "Medio de pago",
+  "scheduleSummary": "Resumen",
+  "scheduleServiceLine": "Servicio",
+  "scheduleHomeLine": "Recargo a domicilio",
+  "scheduleNotes": "Notas para el técnico",
+  "scheduleConfirm": "Confirmar cita",
+  "scheduleIncomplete": "Elige servicio, día, hora y medio de pago",
+  "scheduleNoServices": "Este técnico no tiene servicios para agendar.",
+  "successTitle": "¡Cita agendada!",
+  "successBody": "Tu técnico te espera el {date} a las {time}.",
+  "@successBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "successSeeOrder": "Ver mi reparación",
+  "successGoHome": "Volver al inicio",
+  "ordersTitle": "Mis reparaciones",
+  "ordersActive": "En curso",
+  "ordersHistory": "Historial",
+  "ordersOpenRequests": "Cotizaciones abiertas",
+  "ordersQuotesCount": "{count, plural, =0{Esperando ofertas} =1{1 oferta} other{{count} ofertas}}",
+  "@ordersQuotesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ordersEmptyActive": "No tienes reparaciones en curso",
+  "ordersEmptyHistory": "Aún no tienes reparaciones terminadas",
+  "ordersEmptyBody": "Cuando agendes una cita o aceptes una cotización aparecerá aquí.",
+  "ordersFindTech": "Buscar técnico",
+  "orderTitle": "Orden #{id}",
+  "@orderTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "orderProgress": "Seguimiento",
+  "orderPayment": "Pago",
+  "orderPlatformFee": "Tarifa de servicio",
+  "orderAdjustments": "Ajustes aprobados",
+  "orderWarranty": "Garantía",
+  "orderWarrantyActive": "Activa hasta {date}",
+  "@orderWarrantyActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "orderWarrantyPending": "{days} días desde la entrega",
+  "@orderWarrantyPending": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "orderEvidence": "Evidencias",
+  "orderAdjustmentTitle": "El técnico pide un ajuste",
+  "orderAdjustmentBody": "Costo adicional de {amount}",
+  "@orderAdjustmentBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "orderAdjustmentReview": "Revisar ajuste",
+  "orderAdjustmentApprove": "Aprobar",
+  "orderAdjustmentReject": "Rechazar",
+  "orderAdjustmentApproved": "Ajuste aprobado",
+  "orderAdjustmentRejected": "Ajuste rechazado",
+  "orderConfirmReceipt": "Confirmar recepción",
+  "orderConfirmTitle": "¿Ya tienes tu equipo?",
+  "orderConfirmBody": "Al confirmar liberamos el pago al técnico y comienza tu garantía.",
+  "orderConfirmed": "¡Listo! Pago liberado y garantía activada.",
+  "orderRate": "Calificar servicio",
+  "orderChat": "Escribir al técnico",
+  "orderEscrowHeld": "Dinero retenido en custodia",
+  "orderEscrowReleased": "Pago liberado al técnico",
+  "orderHome": "A domicilio",
+  "orderShop": "En taller",
+  "reviewTitle": "¿Cómo te fue?",
+  "reviewTags": "¿Qué destacas?",
+  "reviewTagPunctual": "Puntual",
+  "reviewTagExcellent": "Excelente trabajo",
+  "reviewTagFriendly": "Amable",
+  "reviewTagClean": "Ordenado",
+  "reviewTagFair": "Precio justo",
+  "reviewTagFast": "Rápido",
+  "reviewComment": "Cuéntanos más (opcional)",
+  "reviewSubmit": "Enviar calificación",
+  "reviewThanks": "¡Gracias por calificar!",
+  "reviewNeedRating": "Elige de 1 a 5 estrellas",
+  "chatTitle": "Mensajes",
+  "chatEmptyTitle": "Sin conversaciones",
+  "chatEmptyBody": "Escríbele a un técnico desde su perfil.",
+  "chatInputHint": "Escribe un mensaje",
+  "chatTyping": "Escribiendo…",
+  "chatOnline": "En línea",
+  "chatPhoto": "Foto",
+  "chatToday": "Hoy",
+  "notificationsTitle": "Notificaciones",
+  "notificationsReadAll": "Leer todas",
+  "notificationsEmpty": "No tienes notificaciones",
+  "dashHello": "Hola, {name}",
+  "@dashHello": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dashAvailable": "Disponible a domicilio",
+  "dashOnline": "En línea · recibes solicitudes",
+  "dashOffline": "Desconectado · no recibes solicitudes",
+  "dashRevenue": "Ingresos del mes",
+  "dashCompleted": "Servicios completados",
+  "dashConversion": "Tasa de conversión",
+  "dashViews": "Visitas al perfil",
+  "dashChange": "{pct}% vs. mes anterior",
+  "@dashChange": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "dashWeekly": "Ingresos semanales",
+  "dashNewRequests": "Solicitudes nuevas",
+  "dashToday": "Citas de hoy",
+  "dashActiveOrders": "Órdenes activas",
+  "dashNoRequests": "No tienes solicitudes nuevas",
+  "dashNoAppointments": "No tienes citas hoy",
+  "dashNoOrders": "No tienes órdenes activas",
+  "dashPlan": "Plan {plan}",
+  "@dashPlan": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyBannerPending": "Verifica tu negocio para cotizar y recibir citas.",
+  "verifyBannerReview": "Tu verificación está en revisión. Te avisaremos pronto.",
+  "verifyBannerRejected": "Tu verificación fue rechazada. Revisa tus documentos y vuelve a enviarlos.",
+  "verifyCta": "Verificar ahora",
+  "verifyTitle": "Verificación del negocio",
+  "verifyBody": "Sube tu documento de identidad o RUT y una foto de tu local. Necesitas al menos una categoría y un servicio activo.",
+  "verifyDocId": "Documento de identidad",
+  "verifyDocRut": "RUT",
+  "verifyDocLocal": "Foto del local",
+  "verifyPick": "Elegir archivo",
+  "verifyChange": "Cambiar",
+  "verifySubmit": "Enviar a revisión",
+  "verifyNeedId": "Sube tu documento de identidad o el RUT",
+  "verifySent": "Documentos enviados. Tu perfil quedó en revisión.",
+  "onboardTitle": "Crea tu perfil de técnico",
+  "onboardBody": "Cuéntanos de tu negocio para empezar a recibir clientes.",
+  "onboardBusinessName": "Nombre del negocio",
+  "onboardDescription": "Descripción breve",
+  "onboardCategories": "Categorías que reparas",
+  "onboardCity": "Ciudad",
+  "onboardAddress": "Dirección del taller",
+  "onboardHome": "Atiendo a domicilio",
+  "onboardHomeFee": "Recargo a domicilio",
+  "onboardCoverage": "Radio de cobertura (km)",
+  "onboardSubmit": "Activar modo técnico",
+  "onboardRequired": "Escribe el nombre del negocio y elige al menos una categoría",
+  "reqTitle": "Solicitudes",
+  "reqNew": "Nuevas",
+  "reqQuoted": "Cotizadas",
+  "reqAccepted": "Aceptadas",
+  "reqEmpty": "No hay solicitudes aquí",
+  "reqEmptyBody": "Cuando un cliente cercano pida cotización aparecerá en esta lista.",
+  "reqUrgencyHigh": "Urgente",
+  "reqUrgencyLow": "Sin prisa",
+  "reqHome": "A domicilio",
+  "reqReject": "Rechazar",
+  "reqSendQuote": "Enviar cotización",
+  "reqRejected": "Solicitud rechazada",
+  "reqYourQuote": "Tu oferta: {price}",
+  "@reqYourQuote": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "reqNeedVerification": "Debes estar verificado para cotizar",
+  "reqRejectConfirm": "¿Rechazar esta solicitud? No afecta tu reputación.",
+  "qsTitle": "Enviar cotización",
+  "qsPrice": "Precio total",
+  "qsTime": "Tiempo estimado",
+  "qsTimeHint": "Ej. 2 horas",
+  "qsWarranty": "Garantía (días)",
+  "qsMessage": "Mensaje para el cliente",
+  "qsSend": "Enviar oferta",
+  "qsSent": "¡Cotización enviada!",
+  "qsInvalid": "Escribe precio y tiempo estimado",
+  "agendaTitle": "Agenda",
+  "agendaEmpty": "Sin citas este día",
+  "agendaStart": "Iniciar servicio",
+  "agendaReady": "Marcar como listo",
+  "agendaStarted": "Servicio iniciado",
+  "agendaMarkedReady": "Orden marcada como lista. Avisamos al cliente.",
+  "agendaShop": "Taller",
+  "agendaHome": "Domicilio",
+  "agendaCancelled": "Cancelada",
+  "agendaCompleted": "Completada",
+  "execTitle": "Orden #{id}",
+  "@execTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "execClient": "Cliente",
+  "execNext": "Avanzar a {state}",
+  "@execNext": {
+    "placeholders": {
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "execAdvanced": "Estado actualizado",
+  "execWaitingClient": "Esperando que el cliente confirme la recepción",
+  "execEvidence": "Agregar evidencia",
+  "execEvidenceNote": "Nota del avance",
+  "execEvidenceSend": "Subir evidencia",
+  "execEvidenceSent": "Evidencia agregada",
+  "execAdjustment": "Pedir costo adicional",
+  "execAdjAmount": "Valor adicional",
+  "execAdjReason": "Motivo (ej. cambio de flex dañado)",
+  "execAdjSend": "Enviar al cliente",
+  "execAdjSent": "Enviamos el ajuste al cliente para su aprobación",
+  "execAdjPending": "Ajuste pendiente de aprobación: {amount}",
+  "@execAdjPending": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "execInvalid": "Completa los campos",
+  "partsTitle": "Repuestos",
+  "partsSearch": "Buscar repuesto",
+  "partsAll": "Todos",
+  "partsDiscount": "-{pct}% plan",
+  "@partsDiscount": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "partsStock": "{count} disponibles",
+  "@partsStock": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "partsOutOfStock": "Agotado",
+  "partsAdd": "Agregar",
+  "partsEmpty": "No hay repuestos para este filtro",
+  "partsCart": "Ver carrito ({count})",
+  "@partsCart": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "partsProTip": "Con el plan Pro tienes 10% de descuento en todos los repuestos.",
+  "cartTitle": "Carrito",
+  "cartEmpty": "Tu carrito está vacío",
+  "cartSubtotal": "Subtotal",
+  "cartShipping": "Envío",
+  "cartFreeShippingLeft": "Te faltan {amount} para envío gratis",
+  "@cartFreeShippingLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartFreeShipping": "¡Tienes envío gratis!",
+  "cartAddress": "Dirección de envío",
+  "cartCheckout": "Hacer pedido",
+  "cartAddressRequired": "Escribe la dirección de envío",
+  "cartOrdered": "Pedido creado por {total}",
+  "@cartOrdered": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "bizTitle": "Mi negocio",
+  "bizPublicProfile": "Perfil público",
+  "bizScheduleTitle": "Horario",
+  "bizServices": "Servicios y precios",
+  "bizSubscription": "Suscripción",
+  "bizWallet": "Billetera",
+  "bizReviews": "Reseñas recibidas",
+  "bizVerification": "Verificación",
+  "bizStatusVERIFIED": "Verificado",
+  "bizStatusIN_REVIEW": "En revisión",
+  "bizStatusPENDING": "Sin verificar",
+  "bizStatusREJECTED": "Rechazado",
+  "bizSaved": "Cambios guardados",
+  "bizServiceNew": "Nuevo servicio",
+  "bizServiceEdit": "Editar servicio",
+  "bizServiceName": "Nombre del servicio",
+  "bizServicePrice": "Precio desde",
+  "bizServiceTime": "Tiempo estimado",
+  "bizServiceWarranty": "Garantía (días)",
+  "bizServiceInactive": "Inactivo",
+  "bizServiceDeactivate": "Desactivar",
+  "bizServiceActivate": "Activar",
+  "bizOpen": "Abre",
+  "bizClose": "Cierra",
+  "bizNoReviews": "Aún no tienes reseñas",
+  "bizReply": "Responder",
+  "bizReplyHint": "Tu respuesta pública (solo una por reseña)",
+  "bizReplySent": "Respuesta publicada",
+  "subTitle": "Planes",
+  "subCurrent": "Plan actual",
+  "subRenews": "Se renueva el {date}",
+  "@subRenews": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subEnds": "Vigente hasta el {date}",
+  "@subEnds": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "subPerMonth": "{price}/mes",
+  "@subPerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "subChoose": "Elegir plan",
+  "subCancel": "Cancelar suscripción",
+  "subCancelConfirm": "Tu plan seguirá activo hasta el fin del periodo. ¿Cancelar?",
+  "subChanged": "Plan actualizado",
+  "subPartsDiscount": "{pct}% de descuento en repuestos",
+  "@subPartsDiscount": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "subMaxQuotes": "Hasta {count} cotizaciones al mes",
+  "@subMaxQuotes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "subUnlimited": "Cotizaciones ilimitadas",
+  "subPayTitle": "Pago de la suscripción",
+  "walletTitle": "Billetera",
+  "walletAvailable": "Disponible",
+  "walletHeld": "Retenido en custodia",
+  "walletWithdrawn": "Retirado",
+  "walletWithdraw": "Solicitar retiro",
+  "walletMovements": "Movimientos",
+  "walletNoMovements": "Aún no tienes movimientos",
+  "walletAmount": "Valor a retirar",
+  "walletDestination": "Destino",
+  "walletAccount": "Número de cuenta o celular",
+  "walletBank": "Cuenta bancaria",
+  "walletSent": "Retiro solicitado",
+  "walletInvalid": "Revisa el valor y la cuenta",
+  "ledgerHOLD": "Pago retenido",
+  "ledgerRELEASE": "Pago liberado",
+  "ledgerREFUND": "Reembolso",
+  "ledgerCOMMISSION": "Comisión",
+  "ledgerWITHDRAWAL": "Retiro",
+  "techOpenMessages": "Mensajes",
+  "bizResponseTime": "Tiempo de respuesta (ej. en 1 hora)",
+  "profileStatsServices": "Servicios",
+  "profileStatsWarranties": "Garantías activas",
+  "profileStatsSpent": "Invertido",
+  "profileMyDevices": "Mis equipos",
+  "profileAddresses": "Direcciones guardadas",
+  "profilePaymentMethods": "Métodos de pago",
+  "profileFavorites": "Técnicos favoritos",
+  "profileSupport": "Soporte y disputas",
+  "profileLanguage": "Idioma",
+  "profileCountry": "País y moneda",
+  "profileCountryNote": "Los precios se muestran en la moneda del país de tu cuenta.",
+  "profileSettings": "Preferencias",
+  "languageEs": "Español",
+  "languageEn": "English",
+  "devicesTitle": "Mis equipos",
+  "devicesEmpty": "Registra tus equipos para pedir cotizaciones más rápido y ver sus garantías.",
+  "devicesAdd": "Agregar equipo",
+  "devicesEdit": "Editar equipo",
+  "devicesType": "Tipo de equipo",
+  "devicesBrand": "Marca",
+  "devicesModel": "Modelo",
+  "devicesNickname": "Apodo (opcional)",
+  "devicesPurchase": "Fecha de compra (opcional)",
+  "devicesWarrantyActive": "Garantía activa hasta {date}",
+  "@devicesWarrantyActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesWarrantyExpired": "Garantía vencida",
+  "devicesNoWarranty": "Sin garantía Sr Robot",
+  "devicesLastService": "Último servicio: {service}",
+  "@devicesLastService": {
+    "placeholders": {
+      "service": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesDelete": "Eliminar",
+  "devicesDeleteConfirm": "¿Eliminar este equipo?",
+  "addressesTitle": "Direcciones",
+  "addressesEmpty": "Guarda direcciones para los servicios a domicilio.",
+  "addressesAdd": "Agregar dirección",
+  "addressesLabel": "Nombre (Casa, Oficina…)",
+  "addressesAddress": "Dirección",
+  "addressesCity": "Ciudad",
+  "addressesNotes": "Indicaciones (opcional)",
+  "addressesDefault": "Predeterminada",
+  "addressesMakeDefault": "Usar como predeterminada",
+  "paymentsTitle": "Métodos de pago",
+  "paymentsEmpty": "Aún no tienes métodos guardados. Puedes elegir cómo pagar en cada cita o cotización.",
+  "paymentsNote": "Por seguridad, Sr Robot nunca guarda el número completo de tu tarjeta.",
+  "paymentsEnding": "Terminada en {last4}",
+  "@paymentsEnding": {
+    "placeholders": {
+      "last4": {
+        "type": "String"
+      }
+    }
+  },
+  "favoritesTitle": "Favoritos",
+  "favoritesEmpty": "Toca el corazón en el perfil de un técnico para guardarlo aquí.",
+  "supportTitle": "Soporte y disputas",
+  "supportEmpty": "No tienes disputas abiertas.",
+  "supportHelp": "Si tienes un problema con una reparación, ábrela desde el detalle de la orden con \"Reportar un problema\".",
+  "disputeOpen": "Abierta",
+  "disputeResolved": "Resuelta",
+  "disputeReport": "Reportar un problema",
+  "disputeTitle": "Reportar un problema",
+  "disputeReason": "Motivo",
+  "disputeReasonQuality": "El equipo sigue fallando",
+  "disputeReasonDamage": "El equipo tiene un daño nuevo",
+  "disputeReasonNoShow": "El técnico no se presentó",
+  "disputeReasonPrice": "Cobro diferente al acordado",
+  "disputeReasonOther": "Otro",
+  "disputeDescription": "Cuéntanos qué pasó",
+  "disputeSubmit": "Abrir disputa",
+  "disputeSent": "Abrimos tu disputa. El pago queda retenido mientras la revisamos.",
+  "disputeOrder": "Orden #{id}",
+  "@disputeOrder": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "disputeUpdates": "Seguimiento",
+  "disputeAddComment": "Agregar comentario",
+  "disputeCommentHint": "Escribe un comentario o adjunta fotos",
+  "disputeResolution": "Resolución",
+  "commonDelete": "Eliminar",
+  "commonEdit": "Editar",
+  "loginDemoMode": "Modo demo (sin servidor)",
+  "loginDemoHint": "Datos de prueba en el teléfono. Usa cliente@srrobot.com o tecnico@srrobot.com con cualquier contraseña de 8+ caracteres; el código OTP es 123456."
+}

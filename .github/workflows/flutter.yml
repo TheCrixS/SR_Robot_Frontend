@@ -1,0 +1,53 @@
+name: Sr Robot CI
+
+# Corre en cada push/PR a main y también manualmente (pestaña Actions).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  android:
+    name: Análisis, pruebas y APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - run: flutter test
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sr-robot-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  ios:
+    name: Compilación iOS (sin firma)
+    runs-on: macos-latest
+    needs: android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
+      - name: Empaquetar Runner.app
+        run: |
+          cd build/ios/iphoneos
+          mkdir -p Payload && cp -R Runner.app Payload/
+          zip -qr sr-robot-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sr-robot-ios-sin-firma
+          path: build/ios/iphoneos/sr-robot-unsigned.ipa

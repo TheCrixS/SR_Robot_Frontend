@@ -1,0 +1,18 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    # Flutter 3.47+ marca Material como "deprecated" mientras migra al
+    # paquete material_ui; se migrará cuando ese paquete sea estable.
+    deprecated_member_use: ignore
+  exclude:
+    - lib/l10n/app_localizations*.dart
+    - build/**
+    - android/**
+    - ios/**
+
+linter:
+  rules:
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_print: true
