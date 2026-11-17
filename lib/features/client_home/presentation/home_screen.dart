@@ -156,10 +156,14 @@ class _Header extends ConsumerWidget {
                           const Icon(Icons.location_on_rounded,
                               color: Colors.white, size: 18),
                           const SizedBox(width: 4),
-                          Text(locationText,
-                              style: AppText.meta.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500)),
+                          Flexible(
+                            child: Text(locationText,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppText.meta.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
+                          ),
                           const Icon(Icons.keyboard_arrow_down_rounded,
                               color: Colors.white, size: 18),
                         ],
@@ -193,7 +197,12 @@ class _Header extends ConsumerWidget {
                   const Icon(Icons.search_rounded,
                       color: SrRobotColors.textGray),
                   const SizedBox(width: 10),
-                  Text(l.homeSearchHint, style: AppText.bodyGray),
+                  Expanded(
+                    child: Text(l.homeSearchHint,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.bodyGray),
+                  ),
                 ],
               ),
             ),

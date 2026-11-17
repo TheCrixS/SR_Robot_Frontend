@@ -251,8 +251,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       setState(() => _error = null);
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  // Wrap: si no cabe en una línea, "Crear cuenta" baja sin desbordar.
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(l.loginNoAccount, style: AppText.meta),
                       TextButton(

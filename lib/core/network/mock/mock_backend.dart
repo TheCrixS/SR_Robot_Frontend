@@ -284,17 +284,17 @@ class MockBackend {
       };
 
   // -------------------------------------------------------------- respuestas
-  _R _ok(Object? data, {String? message, Map<String, dynamic>? extra, int status = 200}) =>
-      _R(status, {'success': true, if (message != null) 'message': message, 'data': data, ...?extra});
+  MockResponse _ok(Object? data, {String? message, Map<String, dynamic>? extra, int status = 200}) =>
+      MockResponse(status, {'success': true, if (message != null) 'message': message, 'data': data, ...?extra});
 
-  _R _list(List<Map<String, dynamic>> items, {Map<String, dynamic>? extra}) => _R(200, {
+  MockResponse _list(List<Map<String, dynamic>> items, {Map<String, dynamic>? extra}) => MockResponse(200, {
         'success': true, 'count': items.length,
         'meta': {'total': items.length, 'page': 1, 'limit': 100, 'pages': 1},
         'data': items, ...?extra,
       });
 
-  _R _err(int status, String message) =>
-      _R(status, {'success': false, 'message': message});
+  MockResponse _err(int status, String message) =>
+      MockResponse(status, {'success': false, 'message': message});
 
   Map<String, dynamic> _fields(Object? data) {
     if (data is Map) return Map<String, dynamic>.from(data);
@@ -313,7 +313,7 @@ class MockBackend {
   bool _bool(Object? v) => v == true || v == 'true';
 
   /// Punto de entrada: método + ruta (relativa a /api/v1) → respuesta.
-  _R handle(String method, String path, Map<String, dynamic> q, Object? data,
+  MockResponse handle(String method, String path, Map<String, dynamic> q, Object? data,
       {String? authorization}) {
     // El token simulado identifica usuario y rol (sobrevive a reinicios de la app).
     final t = RegExp(r'mock-token-(\d+)-(\w+)').firstMatch(authorization ?? '');
@@ -365,7 +365,7 @@ class MockBackend {
   }
 
   // ------------------------------------------------------------------- auth
-  _R _auth(String m, String action, Map<String, dynamic> b) {
+  MockResponse _auth(String m, String action, Map<String, dynamic> b) {
     int pickUser() {
       final id = '${b['email'] ?? ''}${b['phone'] ?? ''}'.toLowerCase();
       if (id.contains('tecnico') || id.endsWith('5566')) return 2;
@@ -375,7 +375,7 @@ class MockBackend {
     switch (action) {
       case 'otp':
       case 'password':
-        return _R(200, {'success': true, 'message': 'Código enviado (demo)', 'expiresInSeconds': 300, 'otpCode': '123456'});
+        return const MockResponse(200, {'success': true, 'message': 'Código enviado (demo)', 'expiresInSeconds': 300, 'otpCode': '123456'});
       case 'verify':
         if (b['code'] != '123456') return _err(400, 'Código inválido. En modo demo usa 123456');
         _currentUser = pickUser();
@@ -434,7 +434,7 @@ class MockBackend {
     return view;
   }
 
-  _R _technicians(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _technicians(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     if (s.length >= 2 && s[1] == 'me') return _myBusiness(m, s, q, b);
     if (s.length == 1) {
       var list = _techs.values.toList();
@@ -491,7 +491,7 @@ class MockBackend {
     return _err(404, 'Ruta no disponible en modo demo');
   }
 
-  _R _myBusiness(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _myBusiness(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     final t = _techs[_myTechId]!;
     final sub = s.length > 2 ? s[2] : '';
     switch (sub) {
@@ -591,7 +591,7 @@ class MockBackend {
     return tags;
   }
 
-  _R _quoteRequests(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _quoteRequests(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     if (s.length == 1 && m == 'POST') {
       final id = _nextId();
       final target = b['targetTechnicianId'] == null ? null : _int(b['targetTechnicianId']);
@@ -664,7 +664,7 @@ class MockBackend {
           for (final v in views) {
             v['labels'] = [for (final t in v['tags'] as List) labels[t]];
           }
-          return _R(200, {
+          return MockResponse(200, {
             'success': true, 'count': views.length, 'status': r['status'],
             'expiresAt': r['expiresAt'], 'waiting': r['status'] == 'OPEN', 'data': views,
           });
@@ -701,7 +701,7 @@ class MockBackend {
   }
 
   // ----------------------------------------------------------------- citas
-  _R _appts(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _appts(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     if (s.length == 1 && m == 'POST') {
       final techId = _int(b['technicianId']);
       final t = _techs[techId];
@@ -751,7 +751,7 @@ class MockBackend {
   }
 
   // ---------------------------------------------------------------- órdenes
-  _R _ordersApi(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _ordersApi(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     final isTech = _activeRole == 'TECHNICIAN';
     bool mine(Map<String, dynamic> o) =>
         isTech ? o['technicianId'] == _myTechId : o['clientId'] == _currentUser;
@@ -862,7 +862,7 @@ class MockBackend {
     };
   }
 
-  _R _chat(String m, List<String> s, Map<String, dynamic> b) {
+  MockResponse _chat(String m, List<String> s, Map<String, dynamic> b) {
     final isTech = _activeRole == 'TECHNICIAN';
     if (s.length == 2 && m == 'GET') {
       final list = _conversations.values
@@ -870,7 +870,7 @@ class MockBackend {
           .map(_convView)
           .toList();
       final total = list.fold<int>(0, (a, c) => a + (c['unread'] as int));
-      return _R(200, {'success': true, 'totalUnread': total, 'data': list});
+      return MockResponse(200, {'success': true, 'totalUnread': total, 'data': list});
     }
     if (s.length == 2 && m == 'POST') {
       final techId = _int(b['technicianId']);
@@ -903,7 +903,7 @@ class MockBackend {
   }
 
   // ----------------------------------------------------------- notificaciones
-  _R _notificationsApi(String m, List<String> s) {
+  MockResponse _notificationsApi(String m, List<String> s) {
     final mine = _notifications.where((n) => n['userId'] == _currentUser).toList();
     if (s.length > 1 && s[1] == 'read-all') {
       for (final n in mine) {
@@ -917,14 +917,14 @@ class MockBackend {
       }
       return _ok(null);
     }
-    return _R(200, {
+    return MockResponse(200, {
       'success': true, 'unreadCount': mine.where((n) => n['read'] != true).length,
       'meta': {'total': mine.length, 'page': 1, 'limit': 50, 'pages': 1}, 'data': mine,
     });
   }
 
   // ---------------------------------------------------------------- cliente
-  _R _crud(Map<int, Map<String, dynamic>> store, String m, List<String> s, Map<String, dynamic> b,
+  MockResponse _crud(Map<int, Map<String, dynamic>> store, String m, List<String> s, Map<String, dynamic> b,
       {Map<String, dynamic> Function(Map<String, dynamic>)? view}) {
     final v = view ?? (Map<String, dynamic> x) => x;
     if (s.length == 2) {
@@ -950,7 +950,7 @@ class MockBackend {
     return _ok(v(store[id]!));
   }
 
-  _R _client(String m, List<String> s, Map<String, dynamic> b) {
+  MockResponse _client(String m, List<String> s, Map<String, dynamic> b) {
     switch (s.length > 1 ? s[1] : '') {
       case 'equipments':
         return _crud(_equipments, m, s, b, view: (e) {
@@ -985,7 +985,7 @@ class MockBackend {
   }
 
   // ------------------------------------------------------- suscripciones B2B
-  _R _subscriptions(String m, String sub, Map<String, dynamic> b) {
+  MockResponse _subscriptions(String m, String sub, Map<String, dynamic> b) {
     if (sub == 'plans') return _ok(_plans);
     if (sub == 'invoices') return _ok(<Object>[]);
     if (m == 'PUT' || m == 'POST') {
@@ -1002,7 +1002,7 @@ class MockBackend {
     });
   }
 
-  _R _supplier(String m, String sub, Map<String, dynamic> q, Map<String, dynamic> b) {
+  MockResponse _supplier(String m, String sub, Map<String, dynamic> q, Map<String, dynamic> b) {
     final discount = _plan == 'PREMIUM' ? 0.15 : _plan == 'PRO' ? 0.10 : 0.0;
     Map<String, dynamic> priced(Map<String, dynamic> p) => {
           ...p, 'listPrice': p['price'], 'discount': discount,
@@ -1028,7 +1028,7 @@ class MockBackend {
         subtotal += (priced(p)['price'] as int) * qty;
       }
       final shipping = subtotal >= 200000 ? 0 : 12000;
-      return _R(201, {
+      return MockResponse(201, {
         'success': true, 'data': {'status': 'PROCESSING'},
         'totals': {'subtotal': subtotal, 'shipping': shipping, 'total': subtotal + shipping},
       });
@@ -1037,7 +1037,7 @@ class MockBackend {
   }
 
   // ---------------------------------------------------------------- disputas
-  _R _disputesApi(String m, List<String> s, Map<String, dynamic> b) {
+  MockResponse _disputesApi(String m, List<String> s, Map<String, dynamic> b) {
     if (s.length == 1) {
       return _list(_disputes.values.where((d) => d['openedBy'] == _currentUser).toList());
     }
@@ -1055,10 +1055,10 @@ class MockBackend {
 }
 
 /// Respuesta simulada: código HTTP + cuerpo JSON.
-class _R {
+class MockResponse {
   final int status;
   final Map<String, dynamic> body;
-  const _R(this.status, this.body);
+  const MockResponse(this.status, this.body);
 }
 
 /// Interceptor que responde desde [MockBackend] cuando el modo demo está activo.
