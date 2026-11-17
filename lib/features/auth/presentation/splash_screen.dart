@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/l10n_ext.dart';
-import '../../../shared/widgets/robot_avatar.dart';
 
+/// Pantalla de arranque: mismo fondo y logo que el splash nativo de Android
+/// (120 dp centrado) para que la transición sea imperceptible.
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+
+  static const logoAsset = 'assets/images/logo.png';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: SrRobotColors.brandGradient),
+      backgroundColor: SrRobotColors.background,
+      body: Stack(
         alignment: Alignment.center,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const RobotAvatar(size: 140),
-            const SizedBox(height: 16),
-            Text(context.l10n.appName,
-                style: AppText.h1.copyWith(color: Colors.white, fontSize: 32)),
-            const SizedBox(height: 24),
-            const SizedBox(
+        children: [
+          Semantics(
+            label: context.l10n.appName,
+            image: true,
+            child: Image.asset(logoAsset, width: 120, height: 120),
+          ),
+          const Positioned(
+            bottom: 96,
+            child: SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
-                  strokeWidth: 2.4, color: Colors.white),
+                  strokeWidth: 2.4, color: SrRobotColors.primaryTeal),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
