@@ -44,13 +44,13 @@ class AppointmentSuccessScreen extends ConsumerWidget {
               SrCard(
                 child: Column(
                   children: [
-                    SummaryRow(summary.serviceName, ref.money(summary.servicePrice)),
+                    SummaryRow(summary.serviceName, ref.money(summary.servicePrice, currency: summary.currency)),
                     if (summary.isHome)
-                      SummaryRow(l.scheduleHomeLine, ref.money(summary.homeFee)),
+                      SummaryRow(l.scheduleHomeLine, ref.money(summary.homeFee, currency: summary.currency)),
                     SummaryRow(l.schedulePayment,
                         paymentLabel(l, summary.paymentMethod)),
                     const Divider(height: 16),
-                    SummaryRow(l.commonTotal, ref.money(summary.total), bold: true),
+                    SummaryRow(l.commonTotal, ref.money(summary.total, currency: summary.currency), bold: true),
                   ],
                 ),
               ),

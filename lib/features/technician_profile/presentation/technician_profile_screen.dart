@@ -15,6 +15,7 @@ import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
 import '../../../shared/widgets/technician_cards.dart';
+import '../../../shared/data/config_repository.dart';
 
 class TechnicianProfileScreen extends ConsumerWidget {
   const TechnicianProfileScreen({super.key, required this.technicianId});
@@ -99,7 +100,7 @@ class _BodyState extends ConsumerState<_Body> {
                 Text(l.techNoServices, style: AppText.meta)
               else
                 for (final s in t.services.where((s) => s.active)) ...[
-                  _ServiceTile(service: s),
+                  _ServiceTile(service: s, currency: widget.tech.currency),
                   const SizedBox(height: 10),
                 ],
               const SizedBox(height: 14),
@@ -159,7 +160,7 @@ class _Cover extends StatelessWidget {
               textAlign: TextAlign.center,
               style: AppText.h1.copyWith(color: Colors.white)),
           const SizedBox(height: 4),
-          Text(tech.categories.join(' · '),
+          Text(tech.categories.map((c) => categoryLabel(context.l10n, c)).join(' · '),
               textAlign: TextAlign.center,
               style: AppText.meta.copyWith(color: Colors.white)),
           const SizedBox(height: 10),
@@ -230,7 +231,7 @@ class _InfoRow extends ConsumerWidget {
         (Icons.home_outlined, l.techCoverage(tech.coverageRadiusKm)),
         if (tech.homeExtraFee > 0)
           (Icons.local_shipping_outlined,
-              l.techHomeFee(ref.money(tech.homeExtraFee))),
+              l.techHomeFee(ref.money(tech.homeExtraFee, currency: tech.currency))),
       ],
     ];
     return SrCard(
@@ -254,8 +255,9 @@ class _InfoRow extends ConsumerWidget {
 }
 
 class _ServiceTile extends ConsumerWidget {
-  const _ServiceTile({required this.service});
+  const _ServiceTile({required this.service, this.currency});
   final TechService service;
+  final String? currency;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -291,7 +293,7 @@ class _ServiceTile extends ConsumerWidget {
               ],
             ),
           ),
-          Text(l.techFrom(ref.money(service.priceFrom)),
+          Text(l.techFrom(ref.money(service.priceFrom, currency: currency)),
               style: AppText.meta.copyWith(
                   color: SrRobotColors.darkTeal, fontWeight: FontWeight.w700)),
         ],

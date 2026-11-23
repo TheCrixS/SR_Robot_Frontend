@@ -14,6 +14,7 @@ class ApiEndpoints {
 
   // Configuración
   static const categories = '/config/categories';
+  static const countries = '/config/countries';
   static String country(String code) => '/config/countries/$code';
 
   // Técnicos

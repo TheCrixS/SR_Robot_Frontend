@@ -199,7 +199,7 @@ class OrderCard extends ConsumerWidget {
                     o.isHomeService ? context.l10n.orderHome : context.l10n.orderShop,
                     style: AppText.small),
               ),
-              Text(ref.money(o.amount),
+              Text(ref.money(o.amount, currency: o.currency),
                   style: AppText.bodyMedium.copyWith(
                       color: SrRobotColors.darkTeal, fontWeight: FontWeight.w700)),
             ],

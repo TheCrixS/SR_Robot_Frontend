@@ -88,7 +88,7 @@ class MyDevicesScreen extends ConsumerWidget {
                               Text(d.title,
                                   style: AppText.bodyMedium
                                       .copyWith(fontWeight: FontWeight.w700)),
-                              Text('${d.type} · ${d.brand} ${d.model}',
+                              Text('${categoryLabel(context.l10n, d.type)} · ${d.brand} ${d.model}',
                                   style: AppText.small),
                               const SizedBox(height: 6),
                               SrTag(wText,
@@ -222,7 +222,7 @@ class _DeviceSheetState extends ConsumerState<_DeviceSheet> {
                 children: [
                   for (final c in {...cats, if (_type != null) _type!})
                     SrFilterChip(
-                      label: '${emojiFor(c)} $c',
+                      label: '${emojiFor(c)} ${categoryLabel(context.l10n, c)}',
                       selected: _type == c,
                       onTap: () => setState(() => _type = c),
                     ),

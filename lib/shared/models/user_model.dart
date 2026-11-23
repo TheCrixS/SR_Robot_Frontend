@@ -60,14 +60,15 @@ class UserModel {
         locale: asStr(j['locale']) ?? 'es-CO',
       );
 
-  UserModel copyWith({UserRole? activeRole}) => UserModel(
+  UserModel copyWith({UserRole? activeRole, String? country, String? locale}) =>
+      UserModel(
         id: id,
         name: name,
         email: email,
         phone: phone,
         roles: roles,
         activeRole: activeRole ?? this.activeRole,
-        country: country,
-        locale: locale,
+        country: country ?? this.country,
+        locale: locale ?? this.locale,
       );
 }

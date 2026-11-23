@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/regional_profile.dart';
@@ -13,6 +12,8 @@ import '../../../shared/models/business_models.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../core/utils/money_input.dart';
+import '../../../core/config/currency_spec.dart';
 
 String _ledgerLabel(AppLocalizations l, String t) => switch (t) {
       'HOLD' => l.ledgerHOLD,
@@ -199,9 +200,10 @@ class _WithdrawSheet extends ConsumerStatefulWidget {
 }
 
 class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
-  late final _amount = TextEditingController(text: '${widget.wallet.available}');
+  late final _amount = TextEditingController(
+      text: ref.read(regionProfileProvider).currency.toInput(widget.wallet.available));
   final _account = TextEditingController();
-  String _type = 'NEQUI';
+  String _type = 'BANK';
   bool _busy = false;
   String? _error;
 
@@ -214,7 +216,7 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
 
   Future<void> _send() async {
     final l = context.l10n;
-    final amount = int.tryParse(_amount.text) ?? 0;
+    final amount = ref.read(regionProfileProvider).currency.toMinor(_amount.text) ?? 0;
     if (amount <= 0 ||
         amount > widget.wallet.available ||
         _account.text.trim().length < 6) {
@@ -243,10 +245,12 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final symbol = ref.watch(regionProfileProvider).currencySymbol;
+    // Destinos de retiro: billeteras del país (sin tarjeta ni efectivo) + banco.
+    final region = ref.watch(regionProfileProvider);
+    final symbol = region.currencySymbol;
     final types = {
-      'NEQUI': l.payNEQUI,
-      'DAVIPLATA': l.payDAVIPLATA,
+      for (final m in region.availablePaymentMethods)
+        if (!_notForWithdrawal.contains(m)) m: paymentLabel(l, m),
       'BANK': l.walletBank,
     };
     return Padding(
@@ -262,8 +266,10 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
               const SizedBox(height: 14),
               TextField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: moneyInputFormatters(
+                    ref.watch(regionProfileProvider).currency),
                 style: AppText.h3,
                 decoration: InputDecoration(
                     labelText: l.walletAmount, prefixText: '$symbol '),
@@ -303,3 +309,9 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
     );
   }
 }
+
+/// Métodos que solo sirven para cobrar, no para recibir un retiro.
+const _notForWithdrawal = {
+  'CARD', 'CASH', 'KLARNA', 'APPLE_PAY', 'STRIPE', 'OXXO', 'CODI',
+  'PAGOEFECTIVO', 'BOLETO',
+};

@@ -15,11 +15,15 @@ class TechniciansMapView extends StatefulWidget {
     required this.technicians,
     required this.center,
     required this.onOpen,
+    this.showUser = true,
   });
 
   final List<TechnicianModel> technicians;
   final GeoPoint center;
   final ValueChanged<TechnicianModel> onOpen;
+
+  /// Dibuja el punto azul del usuario (solo si la ubicación es real).
+  final bool showUser;
 
   @override
   State<TechniciansMapView> createState() => _TechniciansMapViewState();
@@ -48,6 +52,7 @@ class _TechniciansMapViewState extends State<TechniciansMapView> {
             ),
             MarkerLayer(
               markers: [
+                if (widget.showUser)
                 Marker(
                   point: LatLng(widget.center.lat, widget.center.lng),
                   width: 22,

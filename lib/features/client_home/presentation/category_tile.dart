@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/data/config_repository.dart';
+import '../../../core/utils/l10n_ext.dart';
 
 /// Categoría: emoji en contenedor pastel de 62x62.
 class CategoryTile extends StatelessWidget {
@@ -35,7 +36,7 @@ class CategoryTile extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            category,
+            categoryLabel(context.l10n, category),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

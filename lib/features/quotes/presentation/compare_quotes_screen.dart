@@ -18,6 +18,7 @@ import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/payment_selector.dart';
 import '../../../shared/widgets/robot_avatar.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../shared/data/config_repository.dart';
 
 class CompareQuotesScreen extends ConsumerStatefulWidget {
   const CompareQuotesScreen({super.key, required this.requestId});
@@ -99,7 +100,7 @@ class _CompareQuotesScreenState extends ConsumerState<CompareQuotesScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${request.deviceType} · ${request.brandModel}',
+                            Text('${categoryLabel(context.l10n, request.deviceType)} · ${request.brandModel}',
                                 style: AppText.bodyMedium
                                     .copyWith(fontWeight: FontWeight.w700)),
                             const SizedBox(height: 2),
@@ -223,7 +224,7 @@ class _ComparisonTable extends ConsumerWidget {
             horizontalInside: BorderSide(color: SrRobotColors.lineBorder)),
         children: [
           row('', [for (final q in shown) q.technicianName], header: true),
-          row(l.comparePrice, [for (final q in shown) ref.money(q.price)]),
+          row(l.comparePrice, [for (final q in shown) ref.money(q.price, currency: q.currency)]),
           row(l.compareTime, [for (final q in shown) q.estimatedTime]),
           row(l.compareWarranty,
               [for (final q in shown) l.compareWarrantyMonths(q.warrantyDays)]),
@@ -301,7 +302,7 @@ class _QuoteCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Text(ref.money(q.price),
+                Text(ref.money(q.price, currency: q.currency),
                     style: AppText.h3.copyWith(color: SrRobotColors.darkTeal)),
               ],
             ),
@@ -375,7 +376,7 @@ class _PaymentSheetState extends ConsumerState<_PaymentSheet> {
               onChanged: (m) => setState(() => _method = m),
             ),
             const SizedBox(height: 14),
-            SummaryRow(l.commonTotal, ref.money(widget.quote.price), bold: true),
+            SummaryRow(l.commonTotal, ref.money(widget.quote.price, currency: widget.quote.currency), bold: true),
             const SizedBox(height: 10),
             const EscrowNote(),
             const SizedBox(height: 16),

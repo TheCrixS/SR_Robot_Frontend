@@ -15,6 +15,7 @@ class AppointmentSummary {
   final String time;
   final String paymentMethod;
   final bool isHome;
+  final String? currency;
 
   const AppointmentSummary({
     required this.orderId,
@@ -26,6 +27,7 @@ class AppointmentSummary {
     required this.time,
     required this.paymentMethod,
     required this.isHome,
+    this.currency,
   });
 }
 
@@ -79,6 +81,7 @@ class AppointmentsRepository {
       time: time,
       paymentMethod: paymentMethod,
       isHome: isHome,
+      currency: asStr(summary['currency']) ?? asStr(order['currency']),
     );
   }
 }

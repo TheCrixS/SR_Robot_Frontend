@@ -39,4 +39,11 @@ Feature-First + Riverpod + Dio + go_router.
 Fase 1 (lista): login/OTP/registro, modo dual, inicio cliente, búsqueda con lista y mapa, perfil del técnico.
 Fase 2 (lista): cotizaciones, agendar cita, órdenes y detalle, chat en tiempo real, notificaciones.
 Fase 3 (lista): panel del técnico, verificación, solicitudes y cotización, agenda y ejecución de órdenes (evidencias y sobrecostos), repuestos con carrito, perfil, horario, servicios, suscripción, billetera y reseñas.
-Fase 4 (lista): perfil del cliente (mis equipos, direcciones, métodos de pago, favoritos), soporte y disputas, idioma (es/en) y país/moneda, permisos iOS, pruebas unitarias y script de APK.
+Fase 4 (lista): perfil del cliente (mis equipos, direcciones, métodos de pago, favoritos), soporte y disputas, idioma y país/moneda, permisos iOS, pruebas unitarias y script de APK.
+
+## Países e idiomas (v1.1.0)
+- Países: Colombia, México, Argentina, Chile, Perú, Brasil, Estados Unidos, España y Alemania (desde `GET /config/countries`, con catálogo de respaldo en `lib/core/config/regional_profile.dart`).
+- Cada monto se muestra en la moneda del dato (`order.currency`, `tech.currency`…); si no es la del país activo se agrega el código (`$90.000 COP`).
+- Métodos de pago según el país de la cuenta (`GET /payments/methods`).
+- Interfaz en español, inglés, portugués y alemán (`lib/l10n/app_*.arb`). Al elegir el país, el idioma cambia al del país (Brasil → portugués, Alemania → alemán, Estados Unidos → inglés, resto → español); el usuario puede cambiarlo en Perfil → Idioma.
+

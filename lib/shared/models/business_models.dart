@@ -18,6 +18,7 @@ class TechnicianAnalytics {
   final double conversionRate;
   final double rating;
   final String plan;
+  final String? currency;
 
   const TechnicianAnalytics({
     required this.totalRevenue,
@@ -31,6 +32,7 @@ class TechnicianAnalytics {
     required this.conversionRate,
     required this.rating,
     required this.plan,
+    this.currency,
   });
 
   factory TechnicianAnalytics.fromJson(Map<String, dynamic> j) {
@@ -51,6 +53,7 @@ class TechnicianAnalytics {
       conversionRate: conv,
       rating: asDouble(j['rating']),
       plan: asStr(j['plan']) ?? 'BASIC',
+      currency: asStr(j['currency']),
     );
   }
 }

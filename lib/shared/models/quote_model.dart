@@ -1,3 +1,4 @@
+import '../../core/config/regional_profile.dart';
 import 'json_utils.dart';
 import 'order_model.dart';
 
@@ -90,6 +91,7 @@ class QuoteModel {
   final String? message;
   final String status;
   final List<String> tags;
+  final String? currency;
 
   const QuoteModel({
     required this.id,
@@ -104,6 +106,7 @@ class QuoteModel {
     required this.status,
     required this.tags,
     this.message,
+    this.currency,
   });
 
   bool get isBestPrice => tags.contains('BEST_PRICE');
@@ -123,6 +126,8 @@ class QuoteModel {
         message: asStr(j['message']),
         status: asStr(j['status']) ?? 'PENDING',
         tags: asStrList(j['tags']),
+        currency: asStr(j['currency']) ??
+            RegionProfile.currencyForCountry(asStr(j['country'])),
       );
 }
 

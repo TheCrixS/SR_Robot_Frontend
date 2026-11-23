@@ -160,7 +160,7 @@ class _ScheduleFormState extends ConsumerState<_ScheduleForm> {
                     ],
                   ),
                 ),
-                Text(ref.money(s.priceFrom),
+                Text(ref.money(s.priceFrom, currency: widget.tech.currency),
                     style: AppText.bodyMedium.copyWith(
                         color: SrRobotColors.darkTeal,
                         fontWeight: FontWeight.w700)),
@@ -291,7 +291,8 @@ class _ScheduleFormState extends ConsumerState<_ScheduleForm> {
                       if (widget.tech.homeExtraFee > 0)
                         Text(
                             l.scheduleHomeFee(
-                                ref.money(widget.tech.homeExtraFee)),
+                                ref.money(widget.tech.homeExtraFee,
+                                    currency: widget.tech.currency)),
                             style: AppText.small.copyWith(
                                 color: SrRobotColors.darkTeal,
                                 fontWeight: FontWeight.w600)),
@@ -332,11 +333,12 @@ class _ScheduleFormState extends ConsumerState<_ScheduleForm> {
           child: Column(
             children: [
               SummaryRow(l.scheduleServiceLine,
-                  _service == null ? '—' : ref.money(_service!.priceFrom)),
+                  _service == null ? '—' : ref.money(_service!.priceFrom,
+                      currency: widget.tech.currency)),
               if (_home)
-                SummaryRow(l.scheduleHomeLine, ref.money(_homeFee)),
+                SummaryRow(l.scheduleHomeLine, ref.money(_homeFee, currency: widget.tech.currency)),
               const Divider(height: 16),
-              SummaryRow(l.commonTotal, ref.money(_total), bold: true),
+              SummaryRow(l.commonTotal, ref.money(_total, currency: widget.tech.currency), bold: true),
             ],
           ),
         ),

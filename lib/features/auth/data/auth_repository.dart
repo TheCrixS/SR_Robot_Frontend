@@ -84,8 +84,12 @@ class AuthRepository {
     return UserModel.fromJson(asMap(body['data']));
   }
 
-  Future<void> updateMe(Map<String, dynamic> fields) =>
-      _api.put(ApiEndpoints.me, data: fields);
+  /// `PUT /auth/me`: devuelve el usuario actualizado (país, idioma…).
+  Future<UserModel?> updateMe(Map<String, dynamic> fields) async {
+    final body = await _api.put(ApiEndpoints.me, data: fields);
+    final data = asMap(body['data']);
+    return data.isEmpty ? null : UserModel.fromJson(data);
+  }
 
   Future<UserModel> switchMode(UserRole role,
           {Map<String, dynamic>? businessData}) async =>

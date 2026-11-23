@@ -11,6 +11,8 @@ import '../../../shared/models/technician_model.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../core/utils/money_input.dart';
+import '../../../core/config/currency_spec.dart';
 
 /// Catálogo de servicios y precios base del técnico.
 class ServicesScreen extends ConsumerWidget {
@@ -103,7 +105,9 @@ class _ServiceSheet extends ConsumerStatefulWidget {
 class _ServiceSheetState extends ConsumerState<_ServiceSheet> {
   late final _name = TextEditingController(text: widget.service?.name ?? '');
   late final _price = TextEditingController(
-      text: widget.service == null ? '' : '${widget.service!.priceFrom}');
+      text: widget.service == null
+          ? ''
+          : ref.read(regionProfileProvider).currency.toInput(widget.service!.priceFrom));
   late final _time =
       TextEditingController(text: widget.service?.estimatedTime ?? '');
   late final _warranty =
@@ -121,7 +125,7 @@ class _ServiceSheetState extends ConsumerState<_ServiceSheet> {
 
   Future<void> _save({bool? active}) async {
     final l = context.l10n;
-    final price = int.tryParse(_price.text) ?? 0;
+    final price = ref.read(regionProfileProvider).currency.toMinor(_price.text) ?? 0;
     if (_name.text.trim().isEmpty || price <= 0) {
       setState(() => _error = l.execInvalid);
       return;
@@ -186,8 +190,10 @@ class _ServiceSheetState extends ConsumerState<_ServiceSheet> {
               const SizedBox(height: 10),
               TextField(
                 controller: _price,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: moneyInputFormatters(
+                    ref.watch(regionProfileProvider).currency),
                 style: AppText.body,
                 decoration: InputDecoration(
                     labelText: l.bizServicePrice, prefixText: '$symbol '),

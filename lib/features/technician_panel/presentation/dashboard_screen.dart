@@ -79,7 +79,7 @@ class TechnicianDashboardScreen extends ConsumerWidget {
                         child: _Kpi(
                           icon: Icons.payments_outlined,
                           label: l.dashRevenue,
-                          value: ref.money(a.totalRevenue),
+                          value: ref.money(a.totalRevenue, currency: a.currency),
                           footnote: a.revenueChangePct == 0
                               ? null
                               : l.dashChange(
@@ -128,7 +128,7 @@ class TechnicianDashboardScreen extends ConsumerWidget {
                         const SizedBox(height: 14),
                         RevenueBarChart(
                           weeks: a.weekly,
-                          formatAmount: (v) => ref.money(v),
+                          formatAmount: (v) => ref.money(v, currency: a.currency),
                           labelFor: (w) => w.weekStart == null
                               ? ''
                               : DateFormatter.dayMonth(w.weekStart!, locale),

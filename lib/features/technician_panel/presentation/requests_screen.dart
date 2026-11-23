@@ -217,7 +217,7 @@ class _RequestCardState extends ConsumerState<RequestCard> {
                             .copyWith(fontWeight: FontWeight.w700)),
                     Text(
                       [
-                        r.deviceType,
+                        categoryLabel(context.l10n, r.deviceType),
                         if (r.clientName != null) r.clientName!,
                         if (r.distanceKm != null)
                           l.commonKm(r.distanceKm!.toStringAsFixed(1)),

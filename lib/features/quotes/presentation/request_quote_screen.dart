@@ -131,7 +131,7 @@ class _RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
             children: [
               for (final c in cats)
                 SrFilterChip(
-                  label: '${emojiFor(c)} $c',
+                  label: '${emojiFor(c)} ${categoryLabel(context.l10n, c)}',
                   selected: _device == c,
                   onTap: () => setState(() => _device = c),
                 ),

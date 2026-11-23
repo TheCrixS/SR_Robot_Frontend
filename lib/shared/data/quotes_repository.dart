@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/auth/domain/session_controller.dart';
+import '../../core/config/regional_profile.dart';
 import '../../core/constants/api_endpoints.dart';
 import '../../core/network/api_client.dart';
 import '../models/json_utils.dart';
@@ -125,11 +127,21 @@ final quoteRequestProvider = FutureProvider.autoDispose
         ref.watch(quotesRepositoryProvider).detail(id));
 
 /// Métodos de pago reales del país del usuario (`GET /payments/methods`).
+/// Se vuelve a pedir cuando cambia el país de la cuenta; si falla se usan los
+/// del perfil regional activo.
 final paymentMethodsProvider =
     FutureProvider.autoDispose<List<String>>((ref) async {
-  final body =
-      await ref.watch(apiClientProvider).get(ApiEndpoints.paymentMethods);
-  final data = body['data'];
-  if (data is List) return data.map((e) => e.toString()).toList();
-  return asStrList(asMap(data)['methods']);
+  ref.watch(currentUserProvider.select((u) => u?.country));
+  final fallback = ref.read(regionProfileProvider).availablePaymentMethods;
+  try {
+    final body =
+        await ref.watch(apiClientProvider).get(ApiEndpoints.paymentMethods);
+    final data = body['data'];
+    final list = data is List
+        ? data.map((e) => e.toString()).toList()
+        : asStrList(asMap(data)['methods']);
+    return list.isEmpty ? fallback : list;
+  } catch (_) {
+    return fallback;
+  }
 });

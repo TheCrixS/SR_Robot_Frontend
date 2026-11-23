@@ -72,7 +72,8 @@ class OrderModel {
   final int homeFee;
   final int adjustmentsTotal;
   final int platformFee;
-  final String currency;
+  /// Moneda en que se cobró la orden. Null si el backend no la envía.
+  final String? currency;
   final bool isHomeService;
   final String? address;
   final String paymentMethod;
@@ -98,7 +99,7 @@ class OrderModel {
     required this.homeFee,
     required this.adjustmentsTotal,
     required this.platformFee,
-    required this.currency,
+    this.currency,
     required this.isHomeService,
     required this.paymentMethod,
     required this.state,
@@ -135,7 +136,7 @@ class OrderModel {
       homeFee: asInt(pb['homeFee'] ?? j['homeFee']),
       adjustmentsTotal: asInt(pb['adjustments'] ?? j['adjustmentsTotal']),
       platformFee: asInt(pb['platformFee']),
-      currency: asStr(j['currency']) ?? 'COP',
+      currency: asStr(j['currency']) ?? asStr(pb['currency']),
       isHomeService: asBool(j['isHomeService']),
       address: asStr(j['address']),
       paymentMethod: asStr(j['paymentMethod']) ?? '',

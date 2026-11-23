@@ -59,6 +59,16 @@ class SessionController extends StateNotifier<SessionState> {
     state = SessionState(SessionStatus.authenticated, u);
   }
 
+  /// Actualiza la cuenta en el servidor (p. ej. país e idioma) y refleja el
+  /// usuario devuelto, para que pagos y moneda sigan al país de la cuenta.
+  Future<void> updateAccount(Map<String, dynamic> fields) async {
+    final updated = await _repo.updateMe(fields);
+    final current = state.user;
+    if (updated == null || current == null) return;
+    state = SessionState(SessionStatus.authenticated,
+        updated.copyWith(activeRole: current.activeRole));
+  }
+
   Future<void> logout() async {
     await _repo.logout().catchError((_) {});
     state = const SessionState(SessionStatus.unauthenticated);

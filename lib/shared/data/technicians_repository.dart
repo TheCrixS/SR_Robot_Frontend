@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/auth/domain/session_controller.dart';
 import '../../core/constants/api_endpoints.dart';
 import '../../core/network/api_client.dart';
 import '../models/json_utils.dart';
@@ -97,8 +98,12 @@ class TechniciansRepository {
   }
 }
 
-final techniciansRepositoryProvider = Provider<TechniciansRepository>(
-    (ref) => TechniciansRepository(ref.watch(apiClientProvider)));
+/// Depende del país de la cuenta: al cambiarlo se vuelven a pedir los
+/// técnicos (el backend busca dentro del país del usuario).
+final techniciansRepositoryProvider = Provider<TechniciansRepository>((ref) {
+  ref.watch(currentUserProvider.select((u) => u?.country));
+  return TechniciansRepository(ref.watch(apiClientProvider));
+});
 
 final techniciansSearchProvider = FutureProvider.autoDispose
     .family<List<TechnicianModel>, TechnicianQuery>((ref, query) async {

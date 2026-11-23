@@ -1,33 +1,62 @@
+import '../config/currency_spec.dart';
 import '../config/regional_profile.dart';
 
-/// Formatea montos enteros (unidad mínima de la moneda) según el RegionProfile.
+/// Formatea montos enteros (unidad mínima de la moneda).
 /// Nunca usa punto flotante para el cálculo.
 class CurrencyFormatter {
   CurrencyFormatter._();
 
+  /// Monto en la moneda del perfil regional activo.
   static String format(
     int amount,
     RegionProfile region, {
+    String? freeLabel,
+  }) =>
+      formatSpec(amount, region.currency, freeLabel: freeLabel);
+
+  /// Monto en una moneda concreta (la del dato: orden, técnico, cotización).
+  /// Si no es la moneda del país activo se añade el código para no confundir
+  /// (p. ej. `$90.000 COP` visto desde México).
+  static String formatIn(
+    int amount,
+    String? currencyCode,
+    RegionProfile region, {
+    String? freeLabel,
+  }) {
+    if (currencyCode == null ||
+        currencyCode.isEmpty ||
+        currencyCode.toUpperCase() == region.currencyCode) {
+      return format(amount, region, freeLabel: freeLabel);
+    }
+    final spec = CurrencySpec.of(currencyCode);
+    final text = formatSpec(amount, spec, freeLabel: freeLabel);
+    return text == freeLabel || spec.symbol.trim() == spec.code
+        ? text
+        : '$text ${spec.code}';
+  }
+
+  static String formatSpec(
+    int amount,
+    CurrencySpec spec, {
     String? freeLabel,
   }) {
     if (amount == 0 && freeLabel != null) return freeLabel;
 
     final negative = amount < 0;
     final abs = amount.abs();
-    final divisor = _pow10(region.currencyDecimals);
+    final divisor = _pow10(spec.decimals);
     final whole = abs ~/ divisor;
     final fraction = abs % divisor;
 
-    final wholeStr = _groupThousands(whole.toString(), region.thousandSeparator);
-    var number = wholeStr;
-    if (region.currencyDecimals > 0) {
+    var number = _groupThousands(whole.toString(), spec.thousandSeparator);
+    if (spec.decimals > 0) {
       number +=
-          '${region.decimalSeparator}${fraction.toString().padLeft(region.currencyDecimals, '0')}';
+          '${spec.decimalSeparator}${fraction.toString().padLeft(spec.decimals, '0')}';
     }
 
-    final withSymbol = region.symbolBeforeAmount
-        ? '${region.currencySymbol}$number'
-        : '$number ${region.currencySymbol}';
+    final withSymbol = spec.symbolBeforeAmount
+        ? '${spec.symbol}$number'
+        : '$number ${spec.symbol}';
     return negative ? '-$withSymbol' : withSymbol;
   }
 

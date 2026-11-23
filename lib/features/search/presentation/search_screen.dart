@@ -15,6 +15,7 @@ import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
 import '../../../shared/widgets/technician_cards.dart';
 import 'map_view.dart';
+import '../../../shared/models/technician_model.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key, this.initialCategory});
@@ -126,7 +127,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   for (final c in cats) ...[
                     const SizedBox(width: 8),
                     SrFilterChip(
-                      label: '${emojiFor(c)} $c',
+                      label: '${emojiFor(c)} ${categoryLabel(context.l10n, c)}',
                       selected: _query.category == c,
                       onTap: () => setState(() => _query =
                           _query.category == c
@@ -152,12 +153,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         title: l.searchEmptyTitle, body: l.searchEmptyBody);
                   }
                   if (_mapMode) {
-                    if (location == null) {
+                    // Sin GPS se centra en los talleres encontrados.
+                    final center = location ?? _centerOf(list);
+                    if (center == null) {
                       return EmptyStateView(title: l.searchMapNeedsLocation);
                     }
                     return TechniciansMapView(
                       technicians: list,
-                      center: location,
+                      center: center,
+                      showUser: location != null,
                       onOpen: (t) => context.push(Routes.technician(t.id)),
                     );
                   }
@@ -256,4 +260,16 @@ class _ViewToggle extends StatelessWidget {
       ]),
     );
   }
+}
+
+/// Punto medio de los técnicos con coordenadas (null si ninguno tiene).
+GeoPoint? _centerOf(List<TechnicianModel> list) {
+  final pts = list.where((t) => t.lat != null && t.lng != null).toList();
+  if (pts.isEmpty) return null;
+  var lat = 0.0, lng = 0.0;
+  for (final t in pts) {
+    lat += t.lat!;
+    lng += t.lng!;
+  }
+  return GeoPoint(lat / pts.length, lng / pts.length);
 }

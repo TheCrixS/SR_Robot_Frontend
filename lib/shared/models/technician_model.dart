@@ -1,3 +1,4 @@
+import '../../core/config/regional_profile.dart';
 import 'json_utils.dart';
 
 class TechService {
@@ -92,6 +93,9 @@ class TechnicianModel {
   final bool isFavorite;
   final String verificationStatus;
 
+  /// Moneda de sus precios (`currency` o `country` del backend). Null → la del país activo.
+  final String? currency;
+
   const TechnicianModel({
     required this.id,
     required this.businessName,
@@ -113,6 +117,7 @@ class TechnicianModel {
     required this.ratingDistribution,
     required this.isFavorite,
     this.verificationStatus = 'PENDING',
+    this.currency,
     this.lat,
     this.lng,
     this.address,
@@ -146,6 +151,10 @@ class TechnicianModel {
     return TechnicianModel(
       id: asId(j['id']),
       businessName: asStr(j['businessName']) ?? '',
+      currency: asStr(j['currency']) ??
+          asStr(loc['currency']) ??
+          RegionProfile.currencyForCountry(
+              asStr(j['country']) ?? asStr(loc['country'])),
       description: asStr(j['description']) ?? '',
       categories: cats.isNotEmpty
           ? cats

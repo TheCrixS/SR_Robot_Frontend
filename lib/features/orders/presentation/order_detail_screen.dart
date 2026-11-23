@@ -198,15 +198,15 @@ class _OrderBody extends ConsumerWidget {
         SrCard(
           child: Column(
             children: [
-              SummaryRow(l.scheduleServiceLine, ref.money(o.baseAmount)),
+              SummaryRow(l.scheduleServiceLine, ref.money(o.baseAmount, currency: o.currency)),
               if (o.homeFee > 0)
-                SummaryRow(l.scheduleHomeLine, ref.money(o.homeFee)),
+                SummaryRow(l.scheduleHomeLine, ref.money(o.homeFee, currency: o.currency)),
               if (o.adjustmentsTotal > 0)
-                SummaryRow(l.orderAdjustments, ref.money(o.adjustmentsTotal)),
+                SummaryRow(l.orderAdjustments, ref.money(o.adjustmentsTotal, currency: o.currency)),
               if (o.platformFee > 0)
-                SummaryRow(l.orderPlatformFee, ref.money(o.platformFee)),
+                SummaryRow(l.orderPlatformFee, ref.money(o.platformFee, currency: o.currency)),
               const Divider(height: 16),
-              SummaryRow(l.commonTotal, ref.money(o.amount), bold: true),
+              SummaryRow(l.commonTotal, ref.money(o.amount, currency: o.currency), bold: true),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -301,7 +301,7 @@ class _AdjustmentBanner extends ConsumerWidget {
               children: [
                 Text(l.orderAdjustmentTitle,
                     style: AppText.bodyMedium.copyWith(fontWeight: FontWeight.w700)),
-                Text(l.orderAdjustmentBody(ref.money(adj.amount)),
+                Text(l.orderAdjustmentBody(ref.money(adj.amount, currency: order.currency)),
                     style: AppText.meta.copyWith(color: SrRobotColors.textInk)),
               ],
             ),
@@ -376,11 +376,12 @@ class _AdjustmentSheetState extends ConsumerState<_AdjustmentSheet> {
             SrCard(
               child: Column(
                 children: [
-                  SummaryRow(l.commonTotal, ref.money(widget.order.amount)),
-                  SummaryRow('+', ref.money(adj.amount)),
+                  SummaryRow(l.commonTotal, ref.money(widget.order.amount, currency: widget.order.currency)),
+                  SummaryRow('+', ref.money(adj.amount, currency: widget.order.currency)),
                   const Divider(height: 16),
                   SummaryRow(l.commonTotal,
-                      ref.money(widget.order.amount + adj.amount),
+                      ref.money(widget.order.amount + adj.amount,
+                          currency: widget.order.currency),
                       bold: true),
                 ],
               ),

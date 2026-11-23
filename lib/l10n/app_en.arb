@@ -508,5 +508,22 @@
   "commonDelete": "Delete",
   "commonEdit": "Edit",
   "loginDemoMode": "Demo mode (no server)",
-  "loginDemoHint": "Sample data on the phone. Use cliente@srrobot.com or tecnico@srrobot.com with any 8+ character password; the OTP code is 123456."
+  "loginDemoHint": "Sample data on the phone. Use cliente@srrobot.com or tecnico@srrobot.com with any 8+ character password; the OTP code is 123456.",
+  "languagePt": "Português",
+  "languageDe": "Deutsch",
+  "catSmartphones": "Smartphones",
+  "catLaptops": "Laptops",
+  "catTablets": "Tablets",
+  "catConsoles": "Consoles",
+  "catTvs": "TVs",
+  "catAppliances": "Home appliances",
+  "catAudio": "Audio",
+  "catCameras": "Cameras",
+  "catSmartwatches": "Smartwatches",
+  "catTvAudio": "TV/Audio",
+  "catScreens": "Screens",
+  "catBatteries": "Batteries",
+  "catFlex": "Flex cables and connectors",
+  "catSupplies": "Supplies",
+  "payTRANSFER": "Bank transfer"
 }

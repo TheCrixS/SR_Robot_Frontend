@@ -8,6 +8,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/utils/l10n_ext.dart';
 import '../models/technician_model.dart';
 import 'sr_card.dart';
+import '../data/config_repository.dart';
 
 /// Foto del técnico o iniciales si no tiene.
 class TechnicianPhoto extends StatelessWidget {
@@ -68,7 +69,7 @@ class TechnicianCarouselCard extends ConsumerWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppText.bodyMedium.copyWith(fontWeight: FontWeight.w700)),
-            Text(tech.mainCategory,
+            Text(categoryLabel(context.l10n, tech.mainCategory),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppText.small),
@@ -84,7 +85,7 @@ class TechnicianCarouselCard extends ConsumerWidget {
             ),
             if (price != null) ...[
               const SizedBox(height: 6),
-              Text(l.techFrom(ref.money(price)),
+              Text(l.techFrom(ref.money(price, currency: tech.currency)),
                   style: AppText.small.copyWith(
                       color: SrRobotColors.darkTeal,
                       fontWeight: FontWeight.w600)),
@@ -134,7 +135,7 @@ class TechnicianListTile extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(tech.categories.join(' · '),
+                Text(tech.categories.map((c) => categoryLabel(context.l10n, c)).join(' · '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppText.small),
@@ -161,7 +162,7 @@ class TechnicianListTile extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(ref.money(price),
+                  Text(ref.money(price, currency: tech.currency),
                       style: AppText.bodyMedium.copyWith(
                           color: SrRobotColors.darkTeal,
                           fontWeight: FontWeight.w700)),

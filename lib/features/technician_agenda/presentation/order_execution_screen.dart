@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,6 +19,8 @@ import '../../../shared/widgets/order_timeline.dart';
 import '../../../shared/widgets/payment_selector.dart';
 import '../../../shared/widgets/sr_card.dart';
 import 'order_actions.dart';
+import '../../../core/utils/money_input.dart';
+import '../../../core/config/currency_spec.dart';
 
 /// Vista del técnico de una orden: avanzar estados, subir evidencias
 /// y pedir costos adicionales.
@@ -96,7 +97,7 @@ class _Body extends ConsumerWidget {
               if (o.address != null && o.address!.isNotEmpty)
                 Text(o.address!, style: AppText.meta),
               const SizedBox(height: 8),
-              SummaryRow(l.commonTotal, ref.money(o.amount), bold: true),
+              SummaryRow(l.commonTotal, ref.money(o.amount, currency: o.currency), bold: true),
             ],
           ),
         ),
@@ -109,7 +110,8 @@ class _Body extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-                l.execAdjPending(ref.money(o.pendingAdjustment!.amount)),
+                l.execAdjPending(ref.money(o.pendingAdjustment!.amount,
+                    currency: o.currency)),
                 style: AppText.meta.copyWith(color: SrRobotColors.textInk)),
           ),
         ],
@@ -312,7 +314,7 @@ class _AdjustmentRequestSheetState
 
   Future<void> _send() async {
     final l = context.l10n;
-    final amount = int.tryParse(_amount.text.replaceAll(RegExp(r'\D'), '')) ?? 0;
+    final amount = ref.read(regionProfileProvider).currency.toMinor(_amount.text) ?? 0;
     if (amount <= 0 || _reason.text.trim().isEmpty) {
       setState(() => _error = l.execInvalid);
       return;
@@ -354,8 +356,10 @@ class _AdjustmentRequestSheetState
               const SizedBox(height: 12),
               TextField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: moneyInputFormatters(
+                    ref.watch(regionProfileProvider).currency),
                 style: AppText.body,
                 decoration: InputDecoration(
                   hintText: l.execAdjAmount,

@@ -13,10 +13,14 @@ extension L10nX on BuildContext {
 }
 
 extension MoneyX on WidgetRef {
-  /// Formatea un monto entero con el perfil regional activo.
-  String money(int amount, {String? freeLabel}) => CurrencyFormatter.format(
-      amount, read(regionProfileProvider),
-      freeLabel: freeLabel);
+  /// Formatea un monto entero. Si el dato trae su moneda ([currency], p. ej.
+  /// `order.currency`) se usa esa; si no, la del país activo.
+  /// Usa `read` para poder llamarse también desde callbacks; las pantallas
+  /// que muestran dinero ya observan el perfil regional o sus datos.
+  String money(int amount, {String? freeLabel, String? currency}) =>
+      CurrencyFormatter.formatIn(
+          amount, currency, read(regionProfileProvider),
+          freeLabel: freeLabel);
 }
 
 extension OrderStateUi on OrderState {
@@ -41,20 +45,72 @@ extension OrderStateUi on OrderState {
       };
 }
 
+/// Marcas de pago locales: son nombres propios (no se traducen).
+const paymentBrandNames = <String, String>{
+  'NEQUI': 'Nequi',
+  'DAVIPLATA': 'Daviplata',
+  'OXXO': 'OXXO',
+  'SPEI': 'SPEI',
+  'MERCADOPAGO': 'Mercado Pago',
+  'MERCADO_PAGO': 'Mercado Pago',
+  'CODI': 'CoDi',
+  'TRANSFERENCIA_3': 'Transferencias 3.0',
+  'PAGOEFECTIVO': 'PagoEfectivo',
+  'APPLE_PAY': 'Apple Pay',
+  'STRIPE': 'Stripe',
+  'VENMO': 'Venmo',
+  'SEPA_DIRECT_DEBIT': 'SEPA',
+  'KLARNA': 'Klarna',
+  'WEBPAY': 'Webpay',
+  'YAPE': 'Yape',
+  'PLIN': 'Plin',
+  'PIX': 'Pix',
+  'BOLETO': 'Boleto',
+  'PAYPAL': 'PayPal',
+  'BIZUM': 'Bizum',
+  'SEPA': 'SEPA',
+  'PSE': 'PSE',
+};
+
 /// Nombre visible de un método de pago del backend.
 String paymentLabel(AppLocalizations l, String code) => switch (code) {
-      'NEQUI' => l.payNEQUI,
-      'DAVIPLATA' => l.payDAVIPLATA,
       'CARD' => l.payCARD,
       'CASH' => l.payCASH,
-      _ => code,
+      'TRANSFERENCIA' => l.payTRANSFER,
+      _ => paymentBrandNames[code] ?? _humanize(code),
     };
 
-IconData paymentIcon(String code) => switch (code) {
-      'CARD' => Icons.credit_card_rounded,
-      'CASH' => Icons.payments_outlined,
-      _ => Icons.phone_iphone_rounded,
-    };
+String _humanize(String code) {
+  final w = code.toLowerCase().replaceAll('_', ' ');
+  return w.isEmpty ? code : w[0].toUpperCase() + w.substring(1);
+}
+
+/// Ícono por tipo de método (dato visual).
+const _paymentIcons = <String, IconData>{
+  'CARD': Icons.credit_card_rounded,
+  'CASH': Icons.payments_outlined,
+  'OXXO': Icons.storefront_outlined,
+  'BOLETO': Icons.receipt_long_outlined,
+  'SPEI': Icons.account_balance_outlined,
+  'SEPA': Icons.account_balance_outlined,
+  'SEPA_DIRECT_DEBIT': Icons.account_balance_outlined,
+  'TRANSFERENCIA': Icons.account_balance_outlined,
+  'TRANSFERENCIA_3': Icons.qr_code_2_rounded,
+  'CODI': Icons.qr_code_2_rounded,
+  'PAGOEFECTIVO': Icons.storefront_outlined,
+  'APPLE_PAY': Icons.phone_iphone_rounded,
+  'STRIPE': Icons.credit_card_rounded,
+  'KLARNA': Icons.receipt_long_outlined,
+  'VENMO': Icons.account_balance_wallet_outlined,
+  'MERCADO_PAGO': Icons.account_balance_wallet_outlined,
+  'PSE': Icons.account_balance_outlined,
+  'PAYPAL': Icons.account_balance_wallet_outlined,
+  'MERCADOPAGO': Icons.account_balance_wallet_outlined,
+  'WEBPAY': Icons.credit_card_rounded,
+};
+
+IconData paymentIcon(String code) =>
+    _paymentIcons[code] ?? Icons.phone_iphone_rounded;
 
 /// Mensaje de error legible a partir de cualquier excepción.
 String errorText(BuildContext context, Object error) {

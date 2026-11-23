@@ -171,11 +171,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         _CountryPrefix(
                           region: _region,
+                          countries: ref.watch(availableCountriesProvider),
                           onChanged: (r) {
                             setState(() => _region = r);
-                            ref
-                                .read(appSettingsProvider.notifier)
-                                .setCountry(r.countryCode);
+                            ref.read(appSettingsProvider.notifier).setCountry(
+                                r.countryCode,
+                                language:
+                                    AppSettingsNotifier.languageFor(r.locale));
                           },
                         ),
                         const SizedBox(width: 10),
@@ -420,8 +422,10 @@ class _Segmented extends StatelessWidget {
 }
 
 class _CountryPrefix extends StatelessWidget {
-  const _CountryPrefix({required this.region, required this.onChanged});
+  const _CountryPrefix(
+      {required this.region, required this.countries, required this.onChanged});
   final RegionProfile region;
+  final List<RegionProfile> countries;
   final ValueChanged<RegionProfile> onChanged;
 
   @override
@@ -429,10 +433,11 @@ class _CountryPrefix extends StatelessWidget {
     return PopupMenuButton<RegionProfile>(
       onSelected: onChanged,
       itemBuilder: (_) => [
-        for (final r in RegionProfile.all)
+        for (final r in countries)
           PopupMenuItem(
             value: r,
-            child: Text('${r.phonePrefix}  ${r.countryName}', style: AppText.body),
+            child: Text('${r.phonePrefix}  ${r.localizedName(Localizations.localeOf(context).languageCode)}',
+                style: AppText.body),
           ),
       ],
       child: Container(

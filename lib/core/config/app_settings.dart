@@ -28,18 +28,28 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
   static const _kLang = 'sr_lang';
   static const _kCountry = 'sr_country';
   static const kDemo = 'sr_demo';
-  static const supportedLanguages = ['es', 'en'];
+  static const supportedLanguages = ['es', 'en', 'pt', 'de'];
+
+  /// Idioma de interfaz que corresponde a un locale (`pt_BR` → `pt`).
+  /// Si no está traducido se usa español.
+  static String languageFor(String locale) {
+    final lang = locale.split(RegExp('[_-]')).first.toLowerCase();
+    return supportedLanguages.contains(lang) ? lang : 'es';
+  }
 
   Future<void> _load() async {
     try {
       final p = await SharedPreferences.getInstance();
       state = AppSettings(
-        languageCode: p.getString(_kLang) ?? 'es',
+        languageCode: _supported(p.getString(_kLang)),
         countryCode: p.getString(_kCountry) ?? 'CO',
         demoMode: EnvConfig.mockMode,
       );
     } catch (_) {/* sin preferencias guardadas */}
   }
+
+  static String _supported(String? code) =>
+      supportedLanguages.contains(code) ? code! : 'es';
 
   Future<void> setLanguage(String code) async {
     state = state.copyWith(languageCode: code);
@@ -55,10 +65,12 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
     await p.setBool(kDemo, on);
   }
 
-  Future<void> setCountry(String code) async {
-    state = state.copyWith(countryCode: code);
+  /// Cambia el país y, si se indica, el idioma que le corresponde.
+  Future<void> setCountry(String code, {String? language}) async {
+    state = state.copyWith(countryCode: code, languageCode: language);
     final p = await SharedPreferences.getInstance();
     await p.setString(_kCountry, code);
+    if (language != null) await p.setString(_kLang, language);
   }
 }
 

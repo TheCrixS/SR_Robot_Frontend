@@ -56,6 +56,30 @@ class MockBackend {
 
   int get _myTechId => 1; // el técnico de prueba es el negocio #1
 
+  /// Países activos (como `GET /config/countries` del backend real).
+  /// `screen` = precio de referencia de un cambio de pantalla en unidad mínima.
+  static const _countries = <Map<String, dynamic>>[
+    {'code': 'CO', 'name': 'Colombia', 'locale': 'es-CO', 'currency': 'COP', 'minorUnits': 0, 'phonePrefix': '+57', 'paymentMethods': ['NEQUI', 'DAVIPLATA', 'CARD', 'CASH'], 'dataRegion': 'LATAM', 'privacyLaw': 'Ley 1581 de 2012', 'city': 'Bogotá', 'lat': 4.6486, 'lng': -74.0628, 'screen': 180000},
+    {'code': 'MX', 'name': 'México', 'locale': 'es-MX', 'currency': 'MXN', 'minorUnits': 2, 'phonePrefix': '+52', 'paymentMethods': ['MERCADO_PAGO', 'SPEI', 'OXXO', 'CODI', 'CARD', 'CASH'], 'dataRegion': 'LATAM', 'privacyLaw': 'LFPDPPP', 'city': 'Ciudad de México', 'lat': 19.4326, 'lng': -99.1332, 'screen': 180000},
+    {'code': 'AR', 'name': 'Argentina', 'locale': 'es-AR', 'currency': 'ARS', 'minorUnits': 2, 'phonePrefix': '+54', 'paymentMethods': ['MERCADO_PAGO', 'TRANSFERENCIA_3', 'CARD', 'CASH'], 'dataRegion': 'LATAM', 'privacyLaw': 'Ley 25.326', 'city': 'Buenos Aires', 'lat': -34.6037, 'lng': -58.3816, 'screen': 12000000},
+    {'code': 'CL', 'name': 'Chile', 'locale': 'es-CL', 'currency': 'CLP', 'minorUnits': 0, 'phonePrefix': '+56', 'paymentMethods': ['WEBPAY', 'TRANSFERENCIA', 'CARD', 'CASH'], 'dataRegion': 'LATAM', 'privacyLaw': 'Ley 19.628', 'city': 'Santiago', 'lat': -33.4489, 'lng': -70.6693, 'screen': 90000},
+    {'code': 'PE', 'name': 'Perú', 'locale': 'es-PE', 'currency': 'PEN', 'minorUnits': 2, 'phonePrefix': '+51', 'paymentMethods': ['YAPE', 'PLIN', 'PAGOEFECTIVO', 'CARD', 'CASH'], 'dataRegion': 'LATAM', 'privacyLaw': 'Ley 29733', 'city': 'Lima', 'lat': -12.0464, 'lng': -77.0428, 'screen': 35000},
+    {'code': 'BR', 'name': 'Brasil', 'locale': 'pt-BR', 'currency': 'BRL', 'minorUnits': 2, 'phonePrefix': '+55', 'paymentMethods': ['PIX', 'CARD'], 'dataRegion': 'LATAM', 'privacyLaw': 'LGPD', 'city': 'São Paulo', 'lat': -23.5505, 'lng': -46.6333, 'screen': 45000},
+    {'code': 'US', 'name': 'Estados Unidos', 'locale': 'en-US', 'currency': 'USD', 'minorUnits': 2, 'phonePrefix': '+1', 'paymentMethods': ['APPLE_PAY', 'CARD', 'STRIPE', 'VENMO'], 'dataRegion': 'US', 'privacyLaw': 'CCPA', 'city': 'Miami', 'lat': 25.7617, 'lng': -80.1918, 'screen': 15000},
+    {'code': 'ES', 'name': 'España', 'locale': 'es-ES', 'currency': 'EUR', 'minorUnits': 2, 'phonePrefix': '+34', 'paymentMethods': ['BIZUM', 'CARD', 'STRIPE'], 'dataRegion': 'EU', 'privacyLaw': 'RGPD', 'city': 'Madrid', 'lat': 40.4168, 'lng': -3.7038, 'screen': 12000},
+    {'code': 'DE', 'name': 'Alemania', 'locale': 'de-DE', 'currency': 'EUR', 'minorUnits': 2, 'phonePrefix': '+49', 'paymentMethods': ['PAYPAL', 'SEPA_DIRECT_DEBIT', 'KLARNA'], 'dataRegion': 'EU', 'privacyLaw': 'DSGVO', 'city': 'Berlín', 'lat': 52.5200, 'lng': 13.4050, 'screen': 13000},
+  ];
+
+  Map<String, dynamic> _country(String? code) =>
+      _countries.firstWhere((c) => c['code'] == code, orElse: () => _countries.first);
+
+  Map<String, dynamic> _countryPublic(Map<String, dynamic> c) => {
+        for (final k in ['code', 'name', 'locale', 'currency', 'minorUnits', 'phonePrefix', 'paymentMethods', 'dataRegion', 'privacyLaw'])
+          k: c[k],
+      };
+
+  String get _myCountry => '${_users[_currentUser]?['country'] ?? 'CO'}';
+
   // -------------------------------------------------------------- semillas
   void _seed() {
     _users[1] = {
@@ -92,13 +116,42 @@ class MockBackend {
         'homeService': home, 'homeExtraFee': fee, 'coverageRadiusKm': home ? 12 : 0,
         'available': true, 'responseTime': 'en menos de 1 hora',
         'schedule': sched('08:00', '18:00', sat: id != 2), 'photos': <String>[],
-        'completedOrders': 20 + id * 7,
+        'completedOrders': 20 + id * 7, 'country': 'CO', 'currency': 'COP',
         'services': [
           {'id': svc++, 'name': 'Diagnóstico general', 'priceFrom': 30000, 'estimatedTime': '30 min', 'estimatedHours': 1, 'warrantyDays': 30, 'active': true},
           {'id': svc++, 'name': cats.first == 'Smartphones' ? 'Cambio de pantalla' : 'Reparación de tarjeta', 'priceFrom': 180000, 'estimatedTime': '2 horas', 'estimatedHours': 2, 'warrantyDays': 90, 'active': true},
           {'id': svc++, 'name': cats.first == 'Smartphones' ? 'Cambio de batería' : 'Mantenimiento preventivo', 'priceFrom': 90000, 'estimatedTime': '1 hora', 'estimatedHours': 1, 'warrantyDays': 60, 'active': true},
         ],
       };
+    }
+
+    // Dos talleres por cada otro país, con precios en su moneda (unidad mínima).
+    var nextTech = 6;
+    for (final c in _countries.where((c) => c['code'] != 'CO')) {
+      final screen = c['screen'] as int;
+      final city = c['city'] as String;
+      for (final (name, cats, rating, dLat, dLng, plan) in [
+        ('TecnoFix $city', ['Smartphones', 'Tablets'], 4.7, 0.010, -0.006, 'PRO'),
+        ('Hogar Service $city', ['Electrodomésticos', 'Televisores', 'Laptops'], 4.5, -0.012, 0.009, 'BASIC'),
+      ]) {
+        final id = nextTech++;
+        _techs[id] = {
+          'id': id, 'userId': 50 + id, 'businessName': name,
+          'description': 'Servicio técnico en $city: ${cats.join(', ').toLowerCase()}.',
+          'category': cats.first, 'categories': cats, 'rating': rating, 'reviewsCount': 0,
+          'isVerified': true, 'verificationStatus': 'VERIFIED', 'plan': plan,
+          'location': {'lat': (c['lat'] as double) + dLat, 'lng': (c['lng'] as double) + dLng, 'address': 'Centro, $city', 'city': city},
+          'homeService': true, 'homeExtraFee': screen ~/ 12, 'coverageRadiusKm': 10,
+          'available': true, 'responseTime': 'en menos de 2 horas',
+          'schedule': sched('09:00', '18:00'), 'photos': <String>[],
+          'completedOrders': 10 + id, 'country': c['code'], 'currency': c['currency'],
+          'services': [
+            {'id': svc++, 'name': 'Diagnóstico general', 'priceFrom': screen ~/ 6, 'estimatedTime': '30 min', 'estimatedHours': 1, 'warrantyDays': 30, 'active': true},
+            {'id': svc++, 'name': cats.first == 'Smartphones' ? 'Cambio de pantalla' : 'Reparación de tarjeta', 'priceFrom': screen, 'estimatedTime': '2 horas', 'estimatedHours': 2, 'warrantyDays': 90, 'active': true},
+            {'id': svc++, 'name': cats.first == 'Smartphones' ? 'Cambio de batería' : 'Mantenimiento preventivo', 'priceFrom': screen ~/ 2, 'estimatedTime': '1 hora', 'estimatedHours': 1, 'warrantyDays': 60, 'active': true},
+          ],
+        };
+      }
     }
 
     // Reseñas
@@ -227,7 +280,8 @@ class MockBackend {
     _quotes[id] = {
       'id': id, 'requestId': requestId, 'technicianId': techId,
       'technicianName': _techs[techId]!['businessName'], 'technicianRating': _techs[techId]!['rating'],
-      'price': price, 'estimatedTime': time, 'estimatedHours': hours, 'warrantyDays': warranty,
+      'price': price, 'currency': _techs[techId]!['currency'],
+      'estimatedTime': time, 'estimatedHours': hours, 'warrantyDays': warranty,
       'message': message, 'status': 'PENDING', 'createdAt': _now(),
     };
   }
@@ -250,7 +304,7 @@ class MockBackend {
       'id': id, 'clientId': clientId, 'clientName': _users[clientId]!['name'],
       'technicianId': techId, 'technicianName': _techs[techId]!['businessName'],
       'serviceName': service, 'description': '', 'baseAmount': base, 'homeFee': fee,
-      'adjustmentsTotal': 0, 'amount': base + fee, 'currency': 'COP', 'isHomeService': home,
+      'adjustmentsTotal': 0, 'amount': base + fee, 'currency': _techs[techId]!['currency'], 'isHomeService': home,
       'address': home ? (address ?? 'Cra 7 # 45-12') : null, 'paymentMethod': payment,
       'source': source, 'state': state, 'subState': null,
       'estimatedDelivery': _now(Duration(hours: 6 - daysAgo * 24)),
@@ -266,7 +320,7 @@ class MockBackend {
     o['amount'] = total;
     o['paymentBreakdown'] = {
       'service': o['baseAmount'], 'homeFee': o['homeFee'], 'adjustments': o['adjustmentsTotal'],
-      'platformFee': 0, 'total': total, 'currency': 'COP',
+      'platformFee': 0, 'total': total, 'currency': o['currency'],
     };
     return o;
   }
@@ -331,9 +385,14 @@ class MockBackend {
         return _auth(m, seg(1), b);
       case 'config':
         if (seg(1) == 'categories') return _ok(_categories);
-        return _ok({'code': 'CO', 'name': 'Colombia', 'locale': 'es-CO', 'currency': 'COP', 'minorUnits': 0, 'paymentMethods': ['NEQUI', 'DAVIPLATA', 'CARD', 'CASH'], 'plans': _plans});
+        if (seg(1) == 'countries' && seg(2).isEmpty) {
+          return _ok(_countries.map(_countryPublic).toList());
+        }
+        final c = _country(seg(2).isEmpty ? _myCountry : seg(2).toUpperCase());
+        return _ok({..._countryPublic(c), 'plans': _plans, 'commissions': {'b2bRate': 0.1}});
       case 'payments':
-        return _ok(['NEQUI', 'DAVIPLATA', 'CARD', 'CASH']);
+        // Métodos según el país del usuario (API.md §11).
+        return _ok(_country(_myCountry)['paymentMethods']);
       case 'technicians':
         return _technicians(m, s, q, b);
       case 'quote-requests':
@@ -401,7 +460,15 @@ class MockBackend {
       case 'logout':
         return _ok(null, message: 'Sesión cerrada');
       case 'me':
-        if (m == 'PUT') _users[_currentUser]!.addAll(b);
+        if (m == 'PUT') {
+          for (final k in ['name', 'phone', 'locale', 'country', 'preferences']) {
+            if (b.containsKey(k)) _users[_currentUser]![k] = b[k];
+          }
+          final code = '${_users[_currentUser]!['country']}';
+          if (!_countries.any((c) => c['code'] == code)) {
+            return _err(400, 'País no disponible');
+          }
+        }
         return _ok(_me);
       case 'switch-mode':
         final role = '${b['role']}';
@@ -437,7 +504,9 @@ class MockBackend {
   MockResponse _technicians(String m, List<String> s, Map<String, dynamic> q, Map<String, dynamic> b) {
     if (s.length >= 2 && s[1] == 'me') return _myBusiness(m, s, q, b);
     if (s.length == 1) {
-      var list = _techs.values.toList();
+      // Como el backend real: búsqueda dentro del país del usuario.
+      final country = _myCountry;
+      var list = _techs.values.where((t) => t['country'] == country).toList();
       final cat = q['cat']?.toString();
       final text = q['q']?.toString().toLowerCase();
       if (cat != null && cat.isNotEmpty) {
@@ -551,7 +620,7 @@ class MockBackend {
             {'weekStart': _day(-7 * i), 'revenue': [420000, 380000, 510000, 290000, 640000, 455000][5 - i]},
         ];
         return _ok({
-          'periodDays': 30, 'currency': 'COP', 'totalRevenue': 1840000, 'previousRevenue': 1560000,
+          'periodDays': 30, 'currency': _techs[_myTechId]!['currency'], 'totalRevenue': 1840000, 'previousRevenue': 1560000,
           'revenueChangePct': 18, 'weeklyRevenue': weekly, 'completedOrders': 27 + done,
           'profileViews': 312, 'requestsReceived': 41, 'quotesSent': 33, 'quotesAccepted': 19,
           'conversionRate': 0.58, 'rating': t['rating'], 'reviewsCount': t['reviewsCount'], 'plan': _plan,
@@ -598,7 +667,11 @@ class MockBackend {
       final cat = '${b['deviceType']}';
       final matched = target != null
           ? [target]
-          : _techs.values.where((t) => (t['categories'] as List).contains(cat)).map((t) => t['id'] as int).take(3).toList();
+          : _techs.values
+              .where((t) => t['country'] == _myCountry && (t['categories'] as List).contains(cat))
+              .map((t) => t['id'] as int)
+              .take(3)
+              .toList();
       _requests[id] = {
         'id': id, 'clientId': _currentUser, 'clientName': _users[_currentUser]!['name'],
         'deviceType': cat, 'brandModel': b['brandModel'], 'issueDescription': b['issueDescription'],
@@ -608,10 +681,11 @@ class MockBackend {
         'expiresAt': _now(const Duration(hours: 24)), 'createdAt': _now(), 'rejectedBy': <int>[],
       };
       // Simula técnicos que responden (excepto el técnico de prueba, que cotiza a mano).
-      var price = 120000;
+      final screen = _country(_myCountry)['screen'] as int;
+      var price = screen * 2 ~/ 3;
       for (final techId in matched.where((t) => t != _myTechId)) {
         _addQuote(id, techId, price, '${techId + 1} horas', techId + 1, 90, null);
-        price += 25000;
+        price += screen ~/ 7;
       }
       for (final techId in matched) {
         _notify(_techs[techId]!['userId'] as int, 'Nueva solicitud', '$cat · ${b['brandModel']}', 'QUOTE', {'requestId': id});
@@ -730,7 +804,7 @@ class MockBackend {
       final o = _orderView(_orders[orderId]!);
       return _ok({
         'appointment': _appointments[apptId], 'order': o, 'payment': {'status': 'APPROVED'},
-        'summary': {'service': o['baseAmount'], 'homeFee': o['homeFee'], 'total': o['amount'], 'currency': 'COP'},
+        'summary': {'service': o['baseAmount'], 'homeFee': o['homeFee'], 'total': o['amount'], 'currency': o['currency']},
       }, status: 201);
     }
     if (s.length == 1) {

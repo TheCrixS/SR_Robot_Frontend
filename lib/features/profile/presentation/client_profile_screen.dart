@@ -13,8 +13,10 @@ import '../../../shared/data/orders_repository.dart';
 import '../../../shared/models/order_model.dart';
 import '../../../shared/widgets/menu_tile.dart';
 import '../../../shared/widgets/sr_card.dart';
-import '../../auth/data/auth_repository.dart';
 import 'mode_switch_card.dart';
+import '../../auth/domain/session_controller.dart';
+import '../../../shared/data/quotes_repository.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Perfil del cliente: estadísticas, cuenta, preferencias y cambio de modo.
 class ClientProfileScreen extends ConsumerWidget {
@@ -31,7 +33,16 @@ class ClientProfileScreen extends ConsumerWidget {
 
     final delivered =
         history.where((o) => o.state == OrderState.entregado).toList();
-    final spent = delivered.fold<int>(0, (a, o) => a + o.amount);
+    // Total invertido por moneda: no se suman pesos colombianos con mexicanos.
+    final spentBy = <String?, int>{};
+    for (final o in delivered) {
+      spentBy[o.currency] = (spentBy[o.currency] ?? 0) + o.amount;
+    }
+    final spentText = spentBy.isEmpty
+        ? ref.money(0)
+        : spentBy.entries
+            .map((e) => ref.money(e.value, currency: e.key))
+            .join(' + ');
 
     return Scaffold(
       body: SafeArea(
@@ -64,7 +75,7 @@ class ClientProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                      child: _Stat(value: ref.money(spent), label: l.profileStatsSpent)),
+                      child: _Stat(value: spentText, label: l.profileStatsSpent)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -99,13 +110,14 @@ class ClientProfileScreen extends ConsumerWidget {
               MenuTile(
                 icon: Icons.translate_rounded,
                 title: l.profileLanguage,
-                trailing: settings.languageCode == 'en' ? l.languageEn : l.languageEs,
+                trailing: _languageName(l, settings.languageCode),
                 onTap: () => _pickLanguage(context, ref),
               ),
               MenuTile(
                 icon: Icons.public_rounded,
                 title: l.profileCountry,
-                trailing: '${region.countryName} · ${region.currencyCode}',
+                trailing:
+                    '${region.localizedName(settings.languageCode)} · ${region.currencyCode}',
                 onTap: () => _pickCountry(context, ref),
               ),
               const SizedBox(height: 10),
@@ -126,9 +138,9 @@ class ClientProfileScreen extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            for (final (k, label) in [('es', l.languageEs), ('en', l.languageEn)])
+            for (final k in AppSettingsNotifier.supportedLanguages)
               ListTile(
-                title: Text(label, style: AppText.body),
+                title: Text(_languageName(l, k), style: AppText.body),
                 trailing: current == k
                     ? const Icon(Icons.check_rounded, color: SrRobotColors.primaryTeal)
                     : null,
@@ -141,22 +153,25 @@ class ClientProfileScreen extends ConsumerWidget {
     );
     if (code == null) return;
     await ref.read(appSettingsProvider.notifier).setLanguage(code);
-    _syncAccount(ref);
+    await _syncAccount(ref);
   }
 
   Future<void> _pickCountry(BuildContext context, WidgetRef ref) async {
     final l = context.l10n;
     final current = ref.read(appSettingsProvider).countryCode;
+    final countries = ref.read(availableCountriesProvider);
     final code = await showModalBottomSheet<String>(
       context: context,
+      isScrollControlled: true,
       builder: (c) => SafeArea(
-        child: Column(
+        child: SingleChildScrollView(
+         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (final r in RegionProfile.all)
+            for (final r in countries)
               ListTile(
-                title: Text(r.countryName, style: AppText.body),
+                title: Text(r.localizedName(l.localeName), style: AppText.body),
                 subtitle: Text('${r.currencyCode} · ${r.phonePrefix}', style: AppText.small),
                 trailing: current == r.countryCode
                     ? const Icon(Icons.check_rounded, color: SrRobotColors.primaryTeal)
@@ -168,21 +183,29 @@ class ClientProfileScreen extends ConsumerWidget {
               child: Text(l.profileCountryNote, style: AppText.small),
             ),
           ],
+         ),
         ),
       ),
     );
     if (code == null) return;
-    await ref.read(appSettingsProvider.notifier).setCountry(code);
-    _syncAccount(ref);
+    // El idioma sigue al país elegido (Brasil → portugués, Alemania → alemán…).
+    final region = RegionProfile.byCode(code, countries);
+    await ref.read(appSettingsProvider.notifier).setCountry(code,
+        language: AppSettingsNotifier.languageFor(region.locale));
+    await _syncAccount(ref);
   }
 
-  /// Guarda idioma/país también en la cuenta (best effort).
-  void _syncAccount(WidgetRef ref) {
+  /// Guarda idioma/país en la cuenta: el backend decide métodos de pago y
+  /// moneda según el país del usuario. Si no hay red queda solo local.
+  Future<void> _syncAccount(WidgetRef ref) async {
     final s = ref.read(appSettingsProvider);
-    ref
-        .read(authRepositoryProvider)
-        .updateMe({'country': s.countryCode, 'locale': '${s.languageCode}-${s.countryCode}'})
-        .ignore();
+    try {
+      await ref.read(sessionProvider.notifier).updateAccount({
+        'country': s.countryCode,
+        'locale': '${s.languageCode}-${s.countryCode}',
+      });
+    } catch (_) {/* sin red: se mantiene el ajuste local */}
+    ref.invalidate(paymentMethodsProvider);
   }
 }
 
@@ -212,3 +235,11 @@ class _Stat extends StatelessWidget {
     );
   }
 }
+
+/// Nombre de cada idioma escrito en ese idioma.
+String _languageName(AppLocalizations l, String code) => switch (code) {
+      'en' => l.languageEn,
+      'pt' => l.languagePt,
+      'de' => l.languageDe,
+      _ => l.languageEs,
+    };

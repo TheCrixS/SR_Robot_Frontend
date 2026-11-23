@@ -14,6 +14,7 @@ import '../../../shared/models/business_models.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../shared/data/config_repository.dart';
 
 class PartsCatalogScreen extends ConsumerStatefulWidget {
   const PartsCatalogScreen({super.key});
@@ -83,7 +84,7 @@ class _PartsCatalogScreenState extends ConsumerState<PartsCatalogScreen> {
                 for (final c in _knownCategories) ...[
                   const SizedBox(width: 8),
                   SrFilterChip(
-                    label: c,
+                    label: categoryLabel(l, c),
                     selected: _category == c,
                     onTap: () => setState(() => _category = c),
                   ),
@@ -185,7 +186,7 @@ class _ProductCard extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
               style: AppText.meta.copyWith(
                   color: SrRobotColors.textInk, fontWeight: FontWeight.w600)),
-          Text(p.category, style: AppText.tag.copyWith(color: SrRobotColors.textGray)),
+          Text(categoryLabel(context.l10n, p.category), style: AppText.tag.copyWith(color: SrRobotColors.textGray)),
           const Spacer(),
           if (p.hasDiscount) ...[
             Row(

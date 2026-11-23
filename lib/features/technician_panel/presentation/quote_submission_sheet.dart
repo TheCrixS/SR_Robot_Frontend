@@ -9,6 +9,9 @@ import '../../../core/utils/l10n_ext.dart';
 import '../../../shared/data/technician_work_repository.dart';
 import '../../../shared/models/quote_model.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../../../core/utils/money_input.dart';
+import '../../../core/config/currency_spec.dart';
+import '../../../shared/data/config_repository.dart';
 
 /// Modal para que el técnico envíe precio, tiempo, garantía y mensaje.
 Future<bool?> showQuoteSubmissionSheet(
@@ -56,7 +59,7 @@ class _QuoteSubmissionSheetState extends ConsumerState<QuoteSubmissionSheet> {
 
   Future<void> _send() async {
     final l = context.l10n;
-    final price = int.tryParse(_price.text.replaceAll(RegExp(r'\D'), '')) ?? 0;
+    final price = ref.read(regionProfileProvider).currency.toMinor(_price.text) ?? 0;
     if (price <= 0 || _time.text.trim().isEmpty) {
       setState(() => _error = l.qsInvalid);
       return;
@@ -100,12 +103,14 @@ class _QuoteSubmissionSheetState extends ConsumerState<QuoteSubmissionSheet> {
             children: [
               Text(l.qsTitle, style: AppText.h2),
               const SizedBox(height: 4),
-              Text('${r.deviceType} · ${r.brandModel}', style: AppText.meta),
+              Text('${categoryLabel(context.l10n, r.deviceType)} · ${r.brandModel}', style: AppText.meta),
               const SizedBox(height: 16),
               TextField(
                 controller: _price,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: moneyInputFormatters(
+                    ref.watch(regionProfileProvider).currency),
                 style: AppText.h3,
                 decoration: InputDecoration(
                   labelText: l.qsPrice,

@@ -13,6 +13,8 @@ import '../../../shared/models/technician_model.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/empty_state_view.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../core/utils/money_input.dart';
+import '../../../core/config/currency_spec.dart';
 
 /// Edición del perfil público del negocio.
 class BusinessEditScreen extends ConsumerWidget {
@@ -49,7 +51,8 @@ class _FormState extends ConsumerState<_Form> {
   late final _response =
       TextEditingController(text: widget.business.responseTime ?? '');
   late final _fee =
-      TextEditingController(text: '${widget.business.homeExtraFee}');
+      TextEditingController(
+          text: ref.read(regionProfileProvider).currency.toInput(widget.business.homeExtraFee));
   late final _radius =
       TextEditingController(text: '${widget.business.coverageRadiusKm}');
   late final Set<String> _cats = {...widget.business.categories};
@@ -84,7 +87,7 @@ class _FormState extends ConsumerState<_Form> {
         'address': _address.text.trim(),
         'responseTime': _response.text.trim(),
         'homeService': _home,
-        'homeExtraFee': int.tryParse(_fee.text) ?? 0,
+        'homeExtraFee': ref.read(regionProfileProvider).currency.toMinor(_fee.text) ?? 0,
         'coverageRadiusKm': int.tryParse(_radius.text) ?? 0,
       });
       ref.invalidate(myBusinessProvider);
@@ -126,7 +129,7 @@ class _FormState extends ConsumerState<_Form> {
           children: [
             for (final c in {...cats, ..._cats})
               SrFilterChip(
-                label: '${emojiFor(c)} $c',
+                label: '${emojiFor(c)} ${categoryLabel(context.l10n, c)}',
                 selected: _cats.contains(c),
                 onTap: () => setState(
                     () => _cats.contains(c) ? _cats.remove(c) : _cats.add(c)),
@@ -159,8 +162,10 @@ class _FormState extends ConsumerState<_Form> {
               Expanded(
                 child: TextField(
                   controller: _fee,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: moneyInputFormatters(
+                      ref.watch(regionProfileProvider).currency),
                   style: AppText.body,
                   decoration: InputDecoration(
                       labelText: l.onboardHomeFee, prefixText: '$symbol '),
