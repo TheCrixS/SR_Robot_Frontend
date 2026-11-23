@@ -11,6 +11,9 @@ jobs:
   android:
     name: Análisis, pruebas y APK
     runs-on: ubuntu-latest
+    env:
+      # Versión de NDK que pide Flutter (flutter.ndkVersion).
+      NDK_VERSION: 28.2.13676358
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
@@ -21,9 +24,39 @@ jobs:
         with:
           channel: stable
           cache: true
+
+      # El NDK se guarda en caché y se instala con reintentos: una descarga
+      # cortada ("Error reading Zip content") hacía fallar el build.
+      - name: Caché del NDK
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/lib/android/sdk/ndk/${{ env.NDK_VERSION }}
+          key: ndk-${{ runner.os }}-${{ env.NDK_VERSION }}
+      - name: Instalar NDK (con reintentos)
+        run: |
+          if [ -d "$ANDROID_HOME/ndk/$NDK_VERSION" ]; then echo "NDK en caché"; exit 0; fi
+          for i in 1 2 3; do
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null && exit 0
+            echo "Intento $i falló; reintentando…"; rm -rf "$ANDROID_HOME/ndk/$NDK_VERSION"; sleep 15
+          done
+          exit 1
+
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
       - run: flutter test
+
+      # Firma propia (opcional): si existen los secretos ANDROID_KEYSTORE_BASE64
+      # y ANDROID_KEY_PROPERTIES, el APK de GitHub sale con la misma llave que
+      # el de tu PC y se instala encima sin conflicto.
+      - name: Firma propia
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then echo "Sin secretos: se firma con la llave de depuración"; exit 0; fi
+          echo "$KEYSTORE_B64" | base64 -d > android/app/sr-robot-release.jks
+          printf '%s\n' "$KEY_PROPERTIES" > android/key.properties
+
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v5
         with:
