@@ -7,6 +7,7 @@ import 'core/config/regional_profile.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/domain/session_controller.dart';
+import 'shared/widgets/country_picker.dart';
 import 'l10n/app_localizations.dart';
 
 class SrRobotApp extends ConsumerWidget {
@@ -25,6 +26,19 @@ class SrRobotApp extends ConsumerWidget {
         (_, next) {
       if (next == null || next.$1.isEmpty) return;
       final (country, locale) = next;
+      // Si eligió un país en el login, ese manda y se guarda en la cuenta.
+      final chosen = ref.read(loginCountryChoiceProvider);
+      if (chosen != null) {
+        ref.read(loginCountryChoiceProvider.notifier).state = null;
+        if (chosen != country) {
+          final lang = ref.read(appSettingsProvider).languageCode;
+          ref
+              .read(sessionProvider.notifier)
+              .updateAccount({'country': chosen, 'locale': '$lang-$chosen'})
+              .catchError((_) {});
+          return;
+        }
+      }
       final current = ref.read(appSettingsProvider);
       final language = AppSettingsNotifier.languageFor(locale);
       if (current.countryCode != country || current.languageCode != language) {

@@ -13,6 +13,7 @@ import '../../../shared/data/orders_repository.dart';
 import '../../../shared/models/order_model.dart';
 import '../../../shared/widgets/menu_tile.dart';
 import '../../../shared/widgets/sr_card.dart';
+import '../../../shared/widgets/country_picker.dart';
 import 'mode_switch_card.dart';
 import '../../auth/domain/session_controller.dart';
 import '../../../shared/data/quotes_repository.dart';
@@ -157,42 +158,8 @@ class ClientProfileScreen extends ConsumerWidget {
   }
 
   Future<void> _pickCountry(BuildContext context, WidgetRef ref) async {
-    final l = context.l10n;
-    final current = ref.read(appSettingsProvider).countryCode;
-    final countries = ref.read(availableCountriesProvider);
-    final code = await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      builder: (c) => SafeArea(
-        child: SingleChildScrollView(
-         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final r in countries)
-              ListTile(
-                title: Text(r.localizedName(l.localeName), style: AppText.body),
-                subtitle: Text('${r.currencyCode} · ${r.phonePrefix}', style: AppText.small),
-                trailing: current == r.countryCode
-                    ? const Icon(Icons.check_rounded, color: SrRobotColors.primaryTeal)
-                    : null,
-                onTap: () => Navigator.pop(c, r.countryCode),
-              ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-              child: Text(l.profileCountryNote, style: AppText.small),
-            ),
-          ],
-         ),
-        ),
-      ),
-    );
-    if (code == null) return;
-    // El idioma sigue al país elegido (Brasil → portugués, Alemania → alemán…).
-    final region = RegionProfile.byCode(code, countries);
-    await ref.read(appSettingsProvider.notifier).setCountry(code,
-        language: AppSettingsNotifier.languageFor(region.locale));
-    await _syncAccount(ref);
+    final region = await pickCountry(context, ref);
+    if (region != null) await _syncAccount(ref);
   }
 
   /// Guarda idioma/país en la cuenta: el backend decide métodos de pago y

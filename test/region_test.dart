@@ -7,6 +7,7 @@ import 'package:sr_robot_app/core/config/currency_spec.dart';
 import 'package:sr_robot_app/core/config/regional_profile.dart';
 import 'package:sr_robot_app/core/utils/currency_formatter.dart';
 import 'package:sr_robot_app/shared/models/technician_model.dart';
+import 'package:sr_robot_app/shared/widgets/country_picker.dart';
 
 void main() {
   group('Catálogo de países', () {
@@ -143,5 +144,11 @@ void main() {
       expect(RegionProfile.byCode('DE').availablePaymentMethods,
           ['PAYPAL', 'SEPA_DIRECT_DEBIT', 'KLARNA']);
     });
+  });
+
+  test('bandera del selector de país del login', () {
+    expect(flagEmoji('CO'), '🇨🇴');
+    expect(flagEmoji('DE'), '🇩🇪');
+    expect(flagEmoji('X'), '🌐');
   });
 }

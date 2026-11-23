@@ -13,6 +13,7 @@ import '../../../core/utils/l10n_ext.dart';
 import '../../../core/utils/validators.dart';
 import '../../../shared/models/user_model.dart';
 import '../../../shared/widgets/brand_header.dart';
+import '../../../shared/widgets/country_picker.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/robot_avatar.dart';
 import '../data/auth_repository.dart';
@@ -42,6 +43,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _idCtrl.dispose();
     _pwdCtrl.dispose();
     super.dispose();
+  }
+
+  /// País elegido en el login: actualiza el prefijo y se guarda en la cuenta
+  /// al iniciar sesión.
+  void _countryChosen(RegionProfile r) {
+    setState(() => _region = r);
+    ref.read(loginCountryChoiceProvider.notifier).state = r.countryCode;
   }
 
   LoginIdentifier? _identifier() {
@@ -108,9 +116,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: Column(
           children: [
             BrandHeader(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
               child: Column(
                 children: [
+                  // País (y con él moneda, prefijo, pagos e idioma).
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: CountryPill(onPicked: _countryChosen),
+                  ),
+                  const SizedBox(height: 4),
                   const RobotAvatar(size: 110),
                   const SizedBox(height: 12),
                   Text(l.loginTitle,
@@ -173,11 +187,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           region: _region,
                           countries: ref.watch(availableCountriesProvider),
                           onChanged: (r) {
-                            setState(() => _region = r);
                             ref.read(appSettingsProvider.notifier).setCountry(
                                 r.countryCode,
                                 language:
                                     AppSettingsNotifier.languageFor(r.locale));
+                            _countryChosen(r);
                           },
                         ),
                         const SizedBox(width: 10),
